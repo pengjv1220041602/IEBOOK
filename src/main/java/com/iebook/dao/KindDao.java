@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @Description:
  */
 @Mapper
-public class KindDao {
+public interface KindDao {
 
 }
