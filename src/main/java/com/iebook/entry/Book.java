@@ -29,5 +29,5 @@ public class Book extends Page<Book> {
     private String author;
     private Date createdate;
     private Date updatedate;
-    private int flag;
+    private Integer flag;
 }

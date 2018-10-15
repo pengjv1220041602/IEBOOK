@@ -2,9 +2,7 @@ package com.iebook.dao;
 
 import com.iebook.dao.provider.BookDaoProvider;
 import com.iebook.entry.Book;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -22,4 +20,9 @@ public interface BookDao {
     @SelectProvider(type = BookDaoProvider.class, method = "listBookByCondition")
     List<Book> listBookByCondition(Book book);
 
+    @InsertProvider(type = BookDaoProvider.class, method = "saveBook")
+    int saveBook (Book book);
+
+    @UpdateProvider(type = BookDaoProvider.class, method = "updateBook")
+    int updateBook(Book book);
 }
