@@ -1,5 +1,8 @@
 package com.iebook.controller;
 
+import com.iebook.service.BookService;
+import com.iebook.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -10,4 +13,11 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class BookController {
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private BookService bookService;
+
+
 }

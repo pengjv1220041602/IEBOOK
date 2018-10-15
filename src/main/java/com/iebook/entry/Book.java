@@ -1,7 +1,10 @@
 package com.iebook.entry;
 
+import com.iebook.entry.page.Page;
 import lombok.Data;
 import lombok.ToString;
+
+import java.util.Date;
 
 /**
  * @Author ZhPJ
@@ -11,9 +14,10 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class Book {
+public class Book extends Page<Book> {
     private String id;
     private String name;
+    private Kind kind;
     private String isbn;
     private String path;
     private String picpath;
@@ -23,5 +27,7 @@ public class Book {
     private Integer downcount;
     private Integer onlinecount;
     private String author;
+    private Date createdate;
+    private Date updatedate;
     private int flag;
 }

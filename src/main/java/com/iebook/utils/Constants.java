@@ -5,6 +5,15 @@ package com.iebook.utils;
  */
 public class Constants {
 
+    public static class PowerCode {
+        public static final int ADMIN_CODE = 1;
+        public static final int USER_CODE = 0;
+    }
+
+    public static class ExamineCode {
+        public static final int PASS = 1;
+        public static final int NO_PASS = 0;
+    }
     /**
      * 代码值
      */
@@ -34,5 +43,4 @@ public class Constants {
          */
         public static final int NO_EXIST_CODE = 0;
     }
-
 }
