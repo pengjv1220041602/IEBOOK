@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.iebook.entry.User;
 
 public interface UserService {
+    User login (User usr);
     /**
      * @deprecation 查询所有用户
      *

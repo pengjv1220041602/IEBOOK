@@ -12,6 +12,8 @@ import java.util.Date;
 public class User extends Page<User> {
     private String id;
     private String name;
+    private String username;
+    private String password;
     private Integer power;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdate;

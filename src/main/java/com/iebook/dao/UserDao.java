@@ -15,10 +15,13 @@ public interface UserDao {
     @Select("select * from tuser where tuser.id = #{id} and tuser.flag = " + Constants.Code.EXIST_CODE)
     User getUser(User user);
 
+    @Select("select * from tuser where tuser.username = #{username} and tuser.password = #{password} and tuser.flag = " + Constants.Code.EXIST_CODE)
+    User login (User user);
+
     @SelectProvider(type = UserDaoProvider.class, method = "listUserByCondition")
     List<User> listUserByCondition(User user);
 
-    @Insert("insert into tuser (id, name, power,createdate, updatedate, flag) value (#{id}, #{name}, #{power}, #{createdate}, #{updatedate}, #{flag})")
+    @Insert("insert into tuser (id, name,username, password, power,createdate, updatedate, flag) value (#{id}, #{name}, #{username}, #{password}, #{power}, #{createdate}, #{updatedate}, #{flag})")
     int saveUser (User user) ;
 
     @UpdateProvider(type = UserDaoProvider.class, method = "updateUser")

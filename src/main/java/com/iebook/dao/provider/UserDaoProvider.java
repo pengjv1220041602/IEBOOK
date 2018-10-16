@@ -34,6 +34,9 @@ public class UserDaoProvider {
                 if (StringUtils.isNotBlank(user.getName())) {
                     SET("tuser.name = #{name}");
                 }
+                if (StringUtils.isNotBlank(user.getPassword())) {
+                    SET("tuser.password = #{password}");
+                }
                 if (user.getPower() == Constants.PowerCode.ADMIN_CODE || user.getPower() == Constants.PowerCode.USER_CODE) {
                     SET("power = #{power}" );
                 }

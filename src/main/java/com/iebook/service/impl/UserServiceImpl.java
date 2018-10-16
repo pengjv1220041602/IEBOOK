@@ -19,6 +19,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
+    public User login (User user) {
+        return userDao.login(user);
+    }
+
+    @Override
     public PageInfo listUser(int page, int size) {
         PageHelper.startPage(page, size);
         return new PageInfo(userDao.listUser());
