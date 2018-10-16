@@ -40,8 +40,13 @@ public class HomeController {
         return new Result("error", Constants.Code.ERROR_CODE, Boolean.FALSE,null);
     }
 
-    @RequestMapping(path = {"/home", ""}, method = RequestMethod.GET)
+    @RequestMapping(path = {"/nav", ""}, method = RequestMethod.GET)
     public String home () {
-        return "/home/index";
+        return "/home/nav";
+    }
+
+    @RequestMapping(path = "/main")
+    public String main () {
+        return "/home/main";
     }
 }
