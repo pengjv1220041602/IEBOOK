@@ -45,10 +45,10 @@ window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
                     <span class="kv-item-tip">标题字数限制在35个字符</span>
                 </div>
                 <div class="kv-item ue-clear">
-                    <label th:text="${a}">所属种类</label>
+                    <label>所属种类</label>
                     <div class="kv-item-content">
-                        <select th:each = "kind : #{kinds}">
-                            <option th:text = "#{kind.name}"></option>
+                        <select>
+                            <option th:each = "kind : ${kinds}" th:text = "${kind.name}"></option>
                         </select>
                     </div>
                     <span class="kv-item-tip success">成功信息</span>

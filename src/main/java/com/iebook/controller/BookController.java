@@ -27,9 +27,7 @@ public class BookController {
     private KindService kindService;
 
     @RequestMapping(path = "/homebook")
-    public String homeBook (Model model) {
-        model.addAttribute("kinds", kindService.listKind());
-        model.addAttribute("a", "aaaa");
+    public String homeBook () {
         return "/book/home_book";
     }
 
@@ -39,7 +37,8 @@ public class BookController {
     }
 
     @RequestMapping(path = "/bookform")
-    public String bookform () {
+    public String bookform (Model model) {
+        model.addAttribute("kinds", kindService.listKind());
         return "/book/bookform";
     }
 }
