@@ -23,6 +23,7 @@ public class Constants {
      * @return:
      */
     public static class ExamineCode {
+        public static final int NO_AND_PASS = -1;
         public static final int WAIT_EXAMINE = 0;
         public static final int PASS = 1;
         public static final int NO_PASS = 2;

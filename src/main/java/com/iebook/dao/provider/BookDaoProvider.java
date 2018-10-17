@@ -48,7 +48,7 @@ public class BookDaoProvider {
                 WHERE("book.flag = " + Constants.Code.EXIST_CODE);
                 AND();
                 WHERE("examine = " + Constants.ExamineCode.PASS);
-                ORDER_BY("book.updatedate");
+                ORDER_BY("book.updatedate DESC");
             }
         }.toString();
         return sql;
@@ -77,11 +77,14 @@ public class BookDaoProvider {
                     AND();
                     WHERE("tkind.id = #{kind.id}");
                 }
-                if (book.getExamine() != null) {
+                if (book.getExamine() != null && book.getExamine() == Constants.ExamineCode.NO_AND_PASS) {
+                    AND();
+                    WHERE("examine = "+Constants.ExamineCode.NO_PASS+" or examine = "+Constants.ExamineCode.WAIT_EXAMINE);
+                } else if (book.getExamine() != null) {
                     AND();
                     WHERE("examine = #{examine}");
                 }
-                ORDER_BY("book.updatedate");
+                ORDER_BY("book.updatedate DESC");
             }
         }.toString();
         return sql;

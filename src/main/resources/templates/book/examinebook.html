@@ -65,10 +65,11 @@
                     <div class="kv-item ue-clear">
                         <label>选择类型:</label>
                         <div class="kv-item-content">
-                            <select>
-                                <option>全部</option>
-                                <option>全部</option>
-                                <option>全部</option>
+                            <select id = "slt-wait-no-examine">
+                                <option value = "-1" selected>待审核与不通过</option>
+                                <option value="0">待审核</option>
+                                <option value="2">审核不通过</option>
+                                <option value="1">已通过</option>
                             </select>
                         </div>
                     </div>
@@ -136,7 +137,7 @@
 				sortable: 'default',
 				name:'name'	
 			},{
-				label:'电子书查看',
+				label:'审核情况',
 				width:150	
 			},{
 				label: '审核人',
@@ -164,7 +165,13 @@
         });
         
         function tableListen() {
+            sltwaitnoexamine();
+        }
 
+        function sltwaitnoexamine() {
+            $("#slt-wait-no-examine").on("change",function () {
+                sendAjaxForObj(1);
+            })
         }
 
 	    function sendAjaxForObj (index) {
@@ -176,7 +183,7 @@
                 data : {
                     "page" : index ,
                     "size" : 10,
-                    "examine" : 0
+                    "examine" : $("#slt-wait-no-examine option:selected").val()
                 },
                 success:function (res) {
                     pageFun(res.data);
@@ -186,24 +193,45 @@
                         var tempArr = new Array();
                         tempArr.push(value.name);
                         tempArr.push(value.kind.name);
-                        tempArr.push("电子书查看");
+                        tempArr.push(value.examine == 1 ? '审核通过' : (value.examine == 0 ? '待审核' : '审核不通过'));
                         tempArr.push(value.examinename);
                         tempArr.push(value.downcount);
                         tempArr.push(value.onlinecount);
                         tempArr.push(value.updatedate);
                         tempArr.push(value.detail);
-                        var oper = [{label:'审核',value: value.id,onclick:function(){
-                                var con = confirm("审核是否通过？");
+                        var oper = new Array();
+                        var pass = {label:'通过',value: value.id,onclick:function(){
                                 $.post(
                                     "/books/saveorupdatebook",
-                                    {"examine" : con ? 1 : 2, "id":$(this)[0].value},
+                                    {"examine" : 1, "id":$(this)[0].value},
                                     function (res) {
                                         if (res != null && res.success) {
                                             sendAjaxForObj(currec);
                                         }
                                     }
                                 );
-                            }}]
+                            }};
+                        var nopass = {label:"不通过", value:value.id,onclick:function () {
+                                $.post(
+                                    "/books/saveorupdatebook",
+                                    {"examine" : 2, "id":$(this)[0].value},
+                                    function (res) {
+                                        if (res != null && res.success) {
+                                            sendAjaxForObj(currec);
+                                        }
+                                    }
+                                );
+                            }
+                        };
+
+                        if (value.examine == 0) {
+                            oper.push(pass);
+                            oper.push(nopass);
+                        } else if (value.examine == 1) {
+                            oper.push(nopass);
+                        } else {
+                            oper.push(pass);
+                        }
                         tempArr.push(oper);
                         tbody.push(tempArr);
                     });
