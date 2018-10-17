@@ -17,7 +17,7 @@ public interface BookService {
      *
      * @return: 图书列表
      */
-    PageInfo<Book> listBook(Book book);
+    PageInfo<Book> listBook(int page, int size, Book book);
 
     /**
      * @deprecation: 获取图书列表通过条件查询
@@ -25,7 +25,7 @@ public interface BookService {
      * @param: Book对象
      * @return:
      */
-    List<Book> listBookByCondition(Book book);
+    PageInfo<Book> listBookByCondition(int page, int size, Book book);
 
     /**
      * @deprecation: 保存图书
@@ -33,13 +33,6 @@ public interface BookService {
      * @param:
      * @return:
      */
-    int saveBook (Book book);
+    boolean saveOrUpdateBook (Book book);
 
-    /**
-     * @deprecation: 更新图书
-     *
-     * @param:
-     * @return:
-     */
-    int updateBook (Book book);
 }

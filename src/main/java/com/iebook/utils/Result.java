@@ -16,13 +16,6 @@ import java.util.List;
 @Builder
 public class Result {
 
-    public Result (String message, Integer code,boolean success, List datas) {
-        this.message = message;
-        this.code = code;
-        this.success = success;
-        this.datas = datas;
-    }
-
     public Result (String message, Integer code, boolean success, Object data) {
         this.message = message;
         this.code = code;
@@ -39,11 +32,6 @@ public class Result {
      * 返回的code值
      */
     private Integer code;
-
-    /**
-     * 结果集合
-     */
-    private List datas;
 
     /**
      * 返回一个单体对象

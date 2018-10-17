@@ -1,8 +1,10 @@
 package com.iebook.entry;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iebook.entry.page.Page;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -14,7 +16,7 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class Book extends Page<Book> {
+public class Book {
     private String id;
     private String name;
     private Kind kind;
@@ -22,12 +24,17 @@ public class Book extends Page<Book> {
     private String path;
     private String picpath;
     private String detail;
-    private String examine;
+    private Integer examine;
     private String examineuid;
+    private String examinename;
     private Integer downcount;
     private Integer onlinecount;
     private String author;
+    private String updateuid;
+    private String updatename   ;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedate;
     private Integer flag;
 }

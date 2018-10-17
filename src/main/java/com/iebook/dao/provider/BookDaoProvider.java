@@ -6,6 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author ZhPJ
  * @Date 2018/10/15 001516:18
@@ -14,12 +17,36 @@ import org.apache.ibatis.jdbc.SQL;
  */
 public class BookDaoProvider {
 
+    public String listBook (Book book) {
+        String sql = new SQL() {
+            {
+                SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
+                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
+                SELECT("author, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+                FROM("tbook book");
+                LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
+                        , "tuser user2 on book.updateuid = user2.id"
+                        , "tkind on tkind.id = book.kindid");
+                WHERE("book.flag = " + Constants.Code.EXIST_CODE);
+                AND();
+                WHERE("examine = " + Constants.ExamineCode.PASS);
+                ORDER_BY("book.updatedate");
+            }
+        }.toString();
+        return sql;
+    }
+
     public String listBookByCondition (Book book) {
         String sql = new SQL () {
             {
-                SELECT("select *");
-                FROM("tbook");
-                WHERE("flag = " + Constants.Code.EXIST_CODE);
+                SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
+                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
+                SELECT("author, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+                FROM("tbook book");
+                LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
+                        , "tuser user2 on book.updateuid = user2.id"
+                        , "tkind on tkind.id = book.kindid");
+                WHERE("book.flag = " + Constants.Code.EXIST_CODE);
                 if (StringUtils.isNotBlank(book.getName())) {
                     AND();
                     WHERE("name like %#{name}%");
@@ -32,6 +59,7 @@ public class BookDaoProvider {
                     AND();
                     WHERE("examine = #{examine}");
                 }
+                ORDER_BY("book.updatedate");
             }
         }.toString();
         return sql;
@@ -41,12 +69,14 @@ public class BookDaoProvider {
         String sql = new SQL() {
             {
                 INSERT_INTO("tbook");
+                VALUES("id", "#{id}");
                 VALUES("name", "#{name}");
-                VALUES("kindid", "#{kindid}");
+                VALUES("kindid", "#{kind.id}");
                 VALUES("path", "#{path}");
                 VALUES("picpath", "#{picpath}");
                 VALUES("examine", "#{examine}");
                 VALUES("examineuid", "#{examineuid}");
+                VALUES("updateuid", "#{updateuid}");
                 if (book.getDowncount() != null) {
                     VALUES("downcount", "#{downcount}");
                 } else {
@@ -76,6 +106,7 @@ public class BookDaoProvider {
             {
                 UPDATE("tbook");
                 SET("updatedate", "#{updatedate}");
+                SET("updateuid", "#updateuid");
                 if (StringUtils.isNotBlank(book.getName())) {
                     SET("name = #{name}");
                 }

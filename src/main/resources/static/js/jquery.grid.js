@@ -888,7 +888,7 @@
 							if(optArray[j].disable){
 								optList.push('<a href="javascript:;" class="ue-state-disable">'+ optArray[j].label +'</a>');
 							}else{
-								optList.push('<a href="javascript:;">'+ optArray[j].label +'</a>');
+								optList.push('<a href="javascript:;">'+ optArray[j].label + '<input type="hidden" value="'+ optArray[j].value +'" ' +'</a>');
 							}
 						}
 						trArray.push('<tr attr="38"><td class="ui-table-operation">'+ optList.join('') +'</td></tr>');

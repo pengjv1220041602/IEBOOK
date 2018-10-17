@@ -8,10 +8,8 @@
 <link rel="stylesheet" type="text/css" href="../../css/skin_/table.css" />
 <link rel="stylesheet" type="text/css" href="../../css/jquery.grid.css" />
 
-
-<title>表格</title>
+<title>审核电子书</title>
 </head>
-
 <body>
 <div id="container">
 	<div id="hd"></div>
@@ -79,7 +77,6 @@
                 	<input class="button" type="button" value="搜索一下" />
                 </div>
              </div>
-             
             <div class="table">
             	<div class="opt ue-clear">
                 	<span class="sortarea">
@@ -90,7 +87,6 @@
                                 <span class="text">名称</span>
                             </span>
                         </span>
-                        
                         <i class="list"></i>
                         <i class="card"></i>
                     </span>
@@ -103,21 +99,17 @@
                             <i class="icon"></i>
                             <span class="text">删除</span>
                         </a>
-                        
                         <a href="javascript:;" class="statistics">
                             <i class="icon"></i>
                             <span class="text">统计</span>
                         </a>
-                        
                         <a href="javascript:;" class="config">
                             <i class="icon"></i>
                             <span class="text">配置</span>
                         </a>
                     </span>
                 </div>
-                
                 <div class="grid"></div>
-                
                 <div class="pagination"></div>
             </div>
         </div>
@@ -163,40 +155,31 @@
                 width:190
             }];
 			
-	var oper = [{label:'删除',onclick:function(){
-						alert('删除');
-				}},{label:'编辑',onclick: function(){
-					alert('编辑')	
-				}}]
-	var tbody = [
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper], 
-					["201302","uimaker","小牛","山东济南","山东大学","1989-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper], 
-					["201302","uimaker","小牛","山东济南","山东大学","1989-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper], 
-					["201302","uimaker","小牛","山东济南","山东大学","1989-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper], 
-					["201302","uimaker","小牛","山东济南","山东大学","1989-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper], 
-					["201302","uimaker","小牛","山东济南","山东大学","1989-10-18","已审核",oper],
-					["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper]]
-					
+	/*var oper = [{label:'审核',onclick:function(){
+	    alert($(this).html());
+                    var con = confirm("审核是否通过？");
+                    $.post("/books/examinebookpassorno", {"examine" : con ? 1 : 2, "id":$(this).});
+				}}]*/
+	var tbody = [];
+
         $(function () {
             sendAjaxForObj(1);
+            tableListen();
         });
+        
+        function tableListen() {
+
+        }
 
 	    function sendAjaxForObj (index) {
 	        // index = (index == null) ? 0 : index;
 	        $.ajax({
-                url : "/books/listbook",
+                url : "/books/examinebookdata",
                 type : "post",
                 data : {
                     "page" : index ,
-                    "size" : 10
+                    "size" : 10,
+                    "examine" : 0
                 },
                 success:function (res) {
                     debugger
@@ -212,6 +195,11 @@
                         tempArr.push(value.onlinecount);
                         tempArr.push(value.updatedate);
                         tempArr.push(value.detail);
+                        var oper = [{label:'审核',value: value.id,onclick:function(){
+                                alert($(this).html());
+                                // var con = confirm("审核是否通过？");
+                                // $.post("/books/examinebookpassorno", {"examine" : con ? 1 : 2, "id":$(this).});
+                            }}]
                         tempArr.push(oper);
                         tbody.push(tempArr);
                     });

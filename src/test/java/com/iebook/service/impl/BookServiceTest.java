@@ -26,9 +26,7 @@ public class BookServiceTest {
     @Test
     public void listBookTest () {
         Book book = new Book();
-        book.setPage(1);
-        book.setSize(1);
-        PageInfo<Book> info = bookService.listBook(book);
+        PageInfo<Book> info = bookService.listBook(1, 10, book);
         List<Book> list = info.getList();
         System.out.println(list);
     }

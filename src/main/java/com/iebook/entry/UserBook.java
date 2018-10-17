@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class UserBook extends Page<UserBook> {
+public class UserBook {
     private String bookid;
     private String userid;
     private int likecount;

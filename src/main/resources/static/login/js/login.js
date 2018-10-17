@@ -26,7 +26,7 @@ function login() {
         },
         success:function (res) {
             if (res.success) {
-               location.href = "/home";
+               location.href = "/main";
             }
         },
         error : function (res) {

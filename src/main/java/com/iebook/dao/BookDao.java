@@ -2,6 +2,7 @@ package com.iebook.dao;
 
 import com.iebook.dao.provider.BookDaoProvider;
 import com.iebook.entry.Book;
+import com.iebook.utils.Constants;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @Mapper
 public interface BookDao {
-    @Select("select * from tbook")
+    @SelectProvider(type = BookDaoProvider.class, method = "listBook")
     List<Book> listBook();
 
     @SelectProvider(type = BookDaoProvider.class, method = "listBookByCondition")
