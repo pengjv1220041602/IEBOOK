@@ -15,6 +15,10 @@ import java.util.List;
  */
 @Mapper
 public interface BookDao {
+
+    @SelectProvider(type = BookDaoProvider.class, method = "getBook")
+    Book getBook(Book book);
+
     @SelectProvider(type = BookDaoProvider.class, method = "listBook")
     List<Book> listBook();
 

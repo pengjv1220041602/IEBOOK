@@ -126,39 +126,29 @@
 <script type="text/javascript">
 	$('select').select();
 	var head = [{
-				label: '图书名称',
+				label: '用户姓名',
 				width: 100,
 				sortable: 'default',
 				name: 'id'	
 			},{
-				label:'所属类型',
+				label:'登录名',
 				width: 150,
 				sortable: 'default',
 				name:'name'	
 			},{
-				label:'电子书查看',
+				label:'用户权限',
 				width:150	
 			},{
-				label: '审核人',
+				label: '创建时间',
 				width: 120	
 			},{
-				label: '下载量',
-				width:70
-			},{
-                label: '查看量',
-                width:70
-            },{
-                label: '上传时间',
-                width:160
-            },{
-                label: '描述',
-                width:190
-            }];
+				label: '更新时间',
+				width:170
+			}];
 
 	var tbody = [];
 
         $(function () {
-            debugger
             sendAjaxForObj(1);
             tableListen();
         });
@@ -170,13 +160,12 @@
 	    function sendAjaxForObj (index) {
 	        // index = (index == null) ? 0 : index;
 	        $.ajax({
-                url : "/books/examinebookdata",
+                url : "/users/userlist",
                 type : "post",
                 cache:false,
                 data : {
                     "page" : index ,
-                    "size" : 10,
-                    "examine" : 0
+                    "size" : 10
                 },
                 success:function (res) {
                     pageFun(res.data);
@@ -185,25 +174,33 @@
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
                         tempArr.push(value.name);
-                        tempArr.push(value.kind.name);
-                        tempArr.push("电子书查看");
-                        tempArr.push(value.examinename);
-                        tempArr.push(value.downcount);
-                        tempArr.push(value.onlinecount);
+                        tempArr.push(value.username);
+                        tempArr.push(value.power == 1 ? "管理员":"普通用户");
+                        tempArr.push(value.createdate);
                         tempArr.push(value.updatedate);
-                        tempArr.push(value.detail);
-                        var oper = [{label:'审核',value: value.id,onclick:function(){
-                                var con = confirm("审核是否通过？");
-                                $.post(
-                                    "/books/saveorupdatebook",
-                                    {"examine" : con ? 1 : 2, "id":$(this)[0].value},
-                                    function (res) {
-                                        if (res != null && res.success) {
-                                            sendAjaxForObj(currec);
-                                        }
+                        var oper = null;
+                        if (value.power == 1) {
+                            oper =  [{label:'已是管理',value: value.id,onclick:function(){
+
+                                }}]
+                        } else {
+                            oper =   [{label:'开启管理',value: value.id,onclick:function(){
+                                    var con = confirm("是否评为管理？");
+                                    if (con) {
+                                        $.post(
+                                            "/users/saveorupdateuser",
+                                            {"power" :  1, "id":$(this)[0].value},
+                                            function (res) {
+                                                if (res != null && res.success) {
+                                                    sendAjaxForObj(currec);
+                                                }
+                                            }
+                                        );
                                     }
-                                );
-                            }}]
+
+                                }}]
+                        }
+
                         tempArr.push(oper);
                         tbody.push(tempArr);
                     });

@@ -1,5 +1,6 @@
 package com.iebook.entry;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iebook.entry.page.Page;
 import lombok.Data;
 import lombok.ToString;
@@ -15,9 +16,9 @@ public class User extends Page<User> {
     private String username;
     private String password;
     private Integer power;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updatedate;
-    private int flag;
+    private Integer flag;
 }

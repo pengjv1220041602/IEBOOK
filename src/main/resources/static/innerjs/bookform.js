@@ -14,7 +14,7 @@ function booksubmit() {
     $("#booksubmit").on("click", function () {
         if (validateForm()) return;
 
-        $.post("/books/addbook",
+        $.post("/books/saveorupdatebook",
             {
                 "name":$("#name").val(),
                 "kind.id":$("#kind option:selected").val(),

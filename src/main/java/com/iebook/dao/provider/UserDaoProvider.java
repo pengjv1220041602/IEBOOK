@@ -37,11 +37,14 @@ public class UserDaoProvider {
                 if (StringUtils.isNotBlank(user.getPassword())) {
                     SET("tuser.password = #{password}");
                 }
-                if (user.getPower() == Constants.PowerCode.ADMIN_CODE || user.getPower() == Constants.PowerCode.USER_CODE) {
+                if (user.getPower() != null && (user.getPower() == Constants.PowerCode.ADMIN_CODE || user.getPower() == Constants.PowerCode.USER_CODE)) {
                     SET("power = #{power}" );
                 }
-                if (user.getFlag() == Constants.Code.EXIST_CODE || user.getFlag() == Constants.Code.NO_EXIST_CODE) {
+                if (user.getFlag() != null && (user.getFlag() == Constants.Code.EXIST_CODE || user.getFlag() == Constants.Code.NO_EXIST_CODE)) {
                     SET("flag = #{flag}" );
+                }
+                if (user.getUpdatedate() != null) {
+                    SET("updatedate = #{updatedate}" );
                 }
                 SET("updatedate = #{updatedate}");
                 WHERE("tuser.id = #{id}");

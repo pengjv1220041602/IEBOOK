@@ -5,11 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.iebook.dao.UserDao;
 import com.iebook.entry.User;
 import com.iebook.service.UserService;
+import com.iebook.utils.Constants;
+import com.iebook.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -43,10 +46,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean saveOrUpdateUser(User user) {
+        user.setUpdatedate(new Date());
         if (StringUtils.isNotBlank(user.getId())) {
               return userDao.updateUser(user) > 0 ;
         }
-        user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        user.setCreatedate(new Date());
+        user.setPower(Constants.PowerCode.USER_CODE);
+        user.setFlag(Constants.Code.EXIST_CODE);
+        user.setId(Utils.getUUID());
         return userDao.saveUser(user) > 0;
     }
 }

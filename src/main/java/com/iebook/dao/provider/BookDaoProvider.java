@@ -17,6 +17,24 @@ import java.util.Map;
  */
 public class BookDaoProvider {
 
+    public String getBook (Book book) {
+        String sql = new SQL() {
+            {
+                SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
+                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
+                SELECT("author, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+                FROM("tbook book");
+                LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
+                        , "tuser user2 on book.updateuid = user2.id"
+                        , "tkind on tkind.id = book.kindid");
+                WHERE("book.id = #{id}" );
+                AND();
+                WHERE("book.flag = "+Constants.Code.EXIST_CODE);
+            }
+        }.toString();
+        return sql;
+    }
+
     public String listBook (Book book) {
         String sql = new SQL() {
             {
@@ -54,6 +72,10 @@ public class BookDaoProvider {
                 if (StringUtils.isNotBlank(book.getAuthor())) {
                     AND();
                     WHERE("author like %#{author}%");
+                }
+                if (book.getKind() != null && StringUtils.isNotBlank(book.getKind().getId())) {
+                    AND();
+                    WHERE("tkind.id = #{kind.id}");
                 }
                 if (book.getExamine() != null) {
                     AND();
@@ -105,38 +127,38 @@ public class BookDaoProvider {
         String sql = new SQL() {
             {
                 UPDATE("tbook");
-                SET("updatedate", "#{updatedate}");
-                SET("updateuid", "#updateuid");
+                SET("updatedate = #{updatedate}");
+                SET("updateuid = #{updateuid}");
                 if (StringUtils.isNotBlank(book.getName())) {
                     SET("name = #{name}");
                 }
-                if (StringUtils.isNotBlank(book.getKind().getId())) {
-                    SET("kindid", "#{kind.id}");
+                if (book.getKind() != null && StringUtils.isNotBlank(book.getKind().getId())) {
+                    SET("kindid = #{kind.id}");
                 }
                 if (StringUtils.isNotBlank(book.getPath())) {
-                    SET("path", "#{path}");
+                    SET("path = #{path}");
                 }
                 if (StringUtils.isNotBlank(book.getPicpath())) {
-                    SET("picpath", "#{picpath}");
+                    SET("picpath = #{picpath}");
                 }
                 if (StringUtils.isNotBlank(book.getDetail())) {
-                    SET("detail", "#{detail}");
+                    SET("detail = #{detail}");
                 }
                 if (book.getExamine() != null) {
-                    SET("examine", "#{examine}");
-                    SET("examineuid", "#{examineuid}");
+                    SET("examine = #{examine}");
+                    SET("examineuid = #{examineuid}");
                 }
-                if (book.getDowncount() == 1) {
-                    SET("downcount", "downcount + 1");
+                if (book.getDowncount() != null &&  book.getDowncount() == 1) {
+                    SET("downcount = downcount + 1");
                 }
-                if (book.getOnlinecount() == 1) {
-                    SET("onlinecount", "onlinecount + 1");
+                if (book.getOnlinecount() != null && book.getOnlinecount() == 1) {
+                    SET("onlinecount = onlinecount + 1");
                 }
                 if (StringUtils.isNotBlank(book.getAuthor())) {
-                    SET("author", "#{author}");
+                    SET("author = #{author}");
                 }
                 if (book.getFlag() != null) {
-                    SET("flag", "#{flag}");
+                    SET("flag = #{flag}");
                 }
                 WHERE("id = #{id}");
             }

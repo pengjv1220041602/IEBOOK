@@ -5,11 +5,14 @@ import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @Author ZhPJ
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class HomeController {
+    private final String USER_SESSION = "usersession";
     @Autowired
     private UserService userService;
 
@@ -29,10 +33,11 @@ public class HomeController {
 
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
     @ResponseBody
-    public Result userLogin (User user) {
+    public Result userLogin (HttpSession session, User user) {
         try {
             user = userService.login(user);
             if (user != null) {
+                session.setAttribute(USER_SESSION, user);
                 return new Result("success", Constants.Code.SUCCESS_CODE, Boolean.TRUE, user);
             }
         } catch (Exception e) {
@@ -49,5 +54,10 @@ public class HomeController {
     @RequestMapping(path = "/main")
     public String main (Model model) {
         return "/home/main";
+    }
+
+    @RequestMapping(path = "/regist")
+    public String regist () {
+        return "/regist";
     }
 }

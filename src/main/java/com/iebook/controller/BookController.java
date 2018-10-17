@@ -32,7 +32,8 @@ public class BookController {
     private KindService kindService;
 
     @RequestMapping(path = "/homebook")
-    public String homeBook () {
+    public String homeBook (Model model) {
+        model.addAttribute("kinds", kindService.listKind());
         return "/book/home_book";
     }
 
@@ -47,8 +48,16 @@ public class BookController {
         return "/book/bookform";
     }
 
-    @RequestMapping(path = "/addbook", method = RequestMethod.POST)
-    public Result addBook (Book book) {
+    @RequestMapping(path = "/editbookform")
+    public String editBookForm (Model model, Book book) {
+        model.addAttribute("book", bookService.getBook(book));
+        model.addAttribute("kinds", kindService.listKind());
+        return "/book/editbookform";
+    }
+
+    @RequestMapping(path = "/saveorupdatebook", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveOrUpdateBook (Book book) {
         boolean count = bookService.saveOrUpdateBook(book);
         if (count) {
             return new Result("添加成功！", Constants.Code.SUCCESS_CODE, count, null);
@@ -59,7 +68,7 @@ public class BookController {
     @RequestMapping(path = "/listbook", method = RequestMethod.POST)
     @ResponseBody
     public Result listBook (int page, int size, Book book) {
-        PageInfo<Book> pageInfo = bookService.listBook(page, size, book);
+        PageInfo<Book> pageInfo = bookService.listBookByCondition(page, size, book);
         return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, pageInfo);
     }
 
@@ -74,4 +83,5 @@ public class BookController {
         PageInfo<Book> bookPageInfo = bookService.listBookByCondition(page, size, book);
         return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, bookPageInfo);
     }
+
 }

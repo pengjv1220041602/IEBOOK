@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<link rel="stylesheet" type="text/css" href="../../css/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="../../css/skin_/form.css" />
+<link href="umeditor/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<script type="text/javascript" src="../../js/global.js"></script>
+<script type="text/javascript" src="../../js/jquery.select.js"></script>
+<script type="text/javascript" src="../../js/WdatePicker.js"></script>
+<script type="text/javascript">
+window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
+</script>
+<script type="text/javascript" src="../../js/umeditor.config.js"></script>
+<script type="text/javascript" src="../../umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="../../innerjs/bookform.js"></script>
+<title>基础信息</title>
+</head>
+
+<body>
+<div id="container">
+	<div id="hd">
+    </div>
+    <div id="bd">
+    	<div id="main">
+            <h2 class="subfild">
+            	<span>基本信息</span>
+            </h2>
+            <div class="subfild-content base-info">
+            	<div class="kv-item ue-clear">
+                	<label><span class="impInfo">*</span>电子书名称</label>
+                	<div class="kv-item-content">
+                    	<input type="text" th:value="${book.name}" placeholder="电子书名称" class="validates"  maxlength="35" id="name"/>
+                    </div>
+                    <span class="kv-item-tip">标题字数限制在35个字符</span>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>电子书作者</label>
+                    <div class="kv-item-content">
+                        <input type="text" th:value="${book.author}" placeholder="电子书作者" maxlength="20" class="validates"  id="author"/>
+                    </div>
+                    <span class="kv-item-tip">标题字数限制在20个字符</span>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label>所属种类</label>
+                    <div class="kv-item-content">
+                        <select id="kind">
+                            <option th:each = "kind : ${kinds}" th:value="${kind.id}" th:selected="${kind.id == book.kind.id}" th:text = "${kind.name}"></option>
+                        </select>
+                    </div>
+                   <!-- <span class="kv-item-tip success">成功信息</span>-->
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>图书图片</label>
+                    <div class="kv-item-content file">
+                        <span class="text"></span>
+                        <input type="file" />
+                        <input type="button" class="button normal long2" value="浏览.." />
+                    </div>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>上传电子书</label>
+                    <div class="kv-item-content file">
+                        <span class="text"></span>
+                        <input type="file" />
+                        <input type="button" class="button normal long2" value="浏览.." />
+                    </div>
+                </div>
+            </div>
+            <h2 class="subfild">
+            	<span>备注资料</span>
+            </h2>
+            <div class="subfild-content remarkes-info">
+            	<div class="kv-item ue-clear">
+                	<label><span class="impInfo">*</span>电子书描述</label>
+                	<div class="kv-item-content">
+                    	<textarea placeholder="电子书描述" th:text="${book.detail}" id="detail" class="validates" style="width:800px;height:240px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <input class="button" type="button" id="booksubmit" value="确认提交" />
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

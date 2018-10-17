@@ -12,6 +12,9 @@ import java.util.List;
  * @Description:
  */
 public interface BookService {
+
+    Book getBook (Book book);
+
     /**
      * @deprecation: 获取所有的图书列表
      *

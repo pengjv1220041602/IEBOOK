@@ -1,5 +1,6 @@
 package com.iebook.entry;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iebook.entry.page.Page;
 import lombok.Data;
 import lombok.ToString;
@@ -21,9 +22,9 @@ public class UserBook {
     private int likecount;
     private int hatecount;
     private int favourite;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updatedate;
     private int flag;
 }

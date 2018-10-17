@@ -95,12 +95,13 @@ Menu.prototype._bindEvent = function(){
 	var self = this;
 	
 	this.nav.on('click', 'li', function(){
-		
-		if($(this).hasClass('current') || $(this).hasClass('subnav-li')){
-			return false;	
-		}
-		$(this).addClass('current').siblings().removeClass("current").find(".subnav").hide().end().end().find(".subnav").show();
-		
+
+        $(".outwindow").remove();
+        $(this).removeClass('subnav-li');
+        if($(this).hasClass('current') || $(this).hasClass('subnav-li')){
+            // return false;
+        }
+        $(this).addClass('current').siblings().removeClass("current").find(".subnav").hide().end().end().find(".subnav").show();
 	});
 	
 	

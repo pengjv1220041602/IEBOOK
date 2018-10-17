@@ -95,12 +95,12 @@ Menu.prototype._bindEvent = function(){
 	var self = this;
 	
 	this.nav.on('click', 'li', function(){
-		
-		if($(this).hasClass('current') || $(this).hasClass('subnav-li')){
-			return false;	
-		}
-		$(this).addClass('current').siblings().removeClass("current").find(".subnav").hide().end().end().find(".subnav").show();
-		
+        $(".outwindow").remove();
+        $(this).removeClass('subnav-li');
+        if($(this).hasClass('current') || $(this).hasClass('subnav-li')){
+            // return false;
+        }
+        $(this).addClass('current').siblings().removeClass("current").find(".subnav").hide().end().end().find(".subnav").show();
 	});
 	
 	
@@ -183,15 +183,16 @@ Menu.prototype._bindEvent = function(){
 
 /*选择一个*/
 Menu.prototype._select = function($this){
-	var id = $this.attr('data-id'),
+	var id = $this.attr(''),
 		opened = this.cacheOpen[id];
 		
 	// 是否已经存在
-	if(opened){
+	/*if(opened){aaaaaaaaaaaaaaaa
 		this._show($this);	
-	}else{
+	}else{*/
+		$(".tab .ue-clear").empty();
 		this._createContent($this);	
-	}
+	// }
 	
 	this._checkWidth();
 }

@@ -27,6 +27,11 @@ public class BookServiceImpl implements BookService {
     private BookDao bookDao;
 
     @Override
+    public Book getBook (Book book) {
+        return bookDao.getBook(book);
+    }
+
+    @Override
     public PageInfo<Book> listBook(int page, int size, Book book) {
         PageHelper.startPage(page, size);
         return new PageInfo(bookDao.listBook());
@@ -42,7 +47,9 @@ public class BookServiceImpl implements BookService {
     public boolean saveOrUpdateBook(Book book) {
         int result = 0;
         book.setUpdatedate(new Date());
-        book.setExamine(Constants.ExamineCode.WAIT_EXAMINE);
+        if (book.getExamine() == null || book.getExamine() == Constants.ExamineCode.WAIT_EXAMINE) {
+            book.setExamine(Constants.ExamineCode.WAIT_EXAMINE);
+        }
         book.setFlag(Constants.Code.EXIST_CODE);
         book.setUpdateuid("1111111111111111111");
         if (StringUtils.isBlank(book.getId())) {
