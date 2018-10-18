@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../innerjs/pdf/pdf.js"></script>
+    <script type="text/javascript" src="../../innerjs/pdf/pdf.worker.js"></script>
+    <script type="text/javascript" src="../../innerjs/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="../../innerjs/comm.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var id = GetQueryString("id");
+            $("#displayPdfIframe").prop("src","/books/onlineread?id="+id);
+        });
+    </script>
+</head>
+<body>
+<iframe id="displayPdfIframe" width="100%" height="680px"></iframe>
+</body>
+
+
+</html>

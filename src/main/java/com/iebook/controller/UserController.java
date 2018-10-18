@@ -1,6 +1,7 @@
 package com.iebook.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.iebook.entry.Book;
 import com.iebook.entry.User;
 import com.iebook.service.BookService;
 import com.iebook.service.UserService;
@@ -75,4 +76,10 @@ public class UserController {
         }
         return new Result("修改失败！", Constants.Code.ERROR_CODE, Boolean.FALSE, null);
     }
+
+    @RequestMapping(path = "/userbooks")
+    public String usersbook () {
+        return "/user/userbooks";
+    }
+
 }

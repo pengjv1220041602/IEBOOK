@@ -16,3 +16,6 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+web:
+  basepath: E:/files/
+  bookpath: ${web.basepath}bookpath/

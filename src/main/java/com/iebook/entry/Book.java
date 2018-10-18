@@ -5,7 +5,9 @@ import com.iebook.entry.page.Page;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -22,7 +24,9 @@ public class Book {
     private Kind kind;
     private String isbn;
     private String path;
+    private MultipartFile bookpdf;
     private String picpath;
+    private MultipartFile picpathfile;
     private String detail;
     private Integer examine;
     private String examineuid;

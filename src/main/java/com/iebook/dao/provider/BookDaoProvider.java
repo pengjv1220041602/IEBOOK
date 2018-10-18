@@ -22,7 +22,7 @@ public class BookDaoProvider {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
                 SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
-                SELECT("author, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+                SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
                 FROM("tbook book");
                 LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
                         , "tuser user2 on book.updateuid = user2.id"
@@ -40,7 +40,7 @@ public class BookDaoProvider {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
                 SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
-                SELECT("author, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+                SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
                 FROM("tbook book");
                 LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
                         , "tuser user2 on book.updateuid = user2.id"
@@ -59,7 +59,7 @@ public class BookDaoProvider {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
                 SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
-                SELECT("author, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+                SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
                 FROM("tbook book");
                 LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
                         , "tuser user2 on book.updateuid = user2.id"
@@ -83,6 +83,10 @@ public class BookDaoProvider {
                 } else if (book.getExamine() != null) {
                     AND();
                     WHERE("examine = #{examine}");
+                }
+                if (StringUtils.isNotBlank(book.getUpdateuid())) {
+                    AND();
+                    WHERE("book.updateuid = #{updateuid}");
                 }
                 ORDER_BY("book.updatedate DESC");
             }

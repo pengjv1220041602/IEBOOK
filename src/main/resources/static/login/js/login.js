@@ -45,3 +45,14 @@ function validateForm() {
     });
     return result;
 }
+
+
+// 回车事件
+document.onkeyup = function (e) {//按键信息对象以函数参数的形式传递进来了，就是那个e
+//    var code = e.charCode || e.keyCode;  //取出按键信息中的按键代码(大部分浏览器通过keyCode属性获取按键代码，但少部分浏览器使用的却是charCode)
+    var e = e || window.event;
+    if (e.keyCode == 13) {
+        //此处编写用户敲回车后的代码
+        login();
+    }
+}

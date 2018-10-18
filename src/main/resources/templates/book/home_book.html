@@ -112,9 +112,9 @@
                             <span class="text">统计</span>
                         </a>
                         
-                        <a href="javascript:;" class="config">
+                        <a href="javascript:;" class="config" onclick="history.back()">
                             <i class="icon"></i>
-                            <span class="text">配置</span>
+                            <span class="text">返回</span>
                         </a>
                     </span>
                 </div>
@@ -146,16 +146,21 @@
 				sortable: 'default',
 				name: 'id'	
 			},{
+                label: '作者',
+                width: 100,
+                sortable: 'default',
+                name: 'author'
+            },{
 				label:'所属类型',
 				width: 150,
 				sortable: 'default',
 				name:'name'	
 			},{
-				label:'电子书查看',
-				width:150	
+				label:'上传者',
+				width:70
 			},{
 				label: '审核人',
-				width: 120	
+				width: 70
 			},{
 				label: '下载量',
 				width:70
@@ -167,7 +172,7 @@
                 width:160
             },{
                 label: '描述',
-                width:280
+                width:200
             }];
 			
 	var tbody = []
@@ -200,9 +205,12 @@
                     var currec = res.data.pageNum;
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
-                        tempArr.push(value.name);
+                        // tempArr.push("<a href='javascript:;' target='_blank' onclick='window.parent.frames.location.href=\"/books/onlinebook?id="+value.id +"\"'>" + value.name +"</a>");
+                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
+                        tempArr.push(value.author);
+
                         tempArr.push(value.kind.name);
-                        tempArr.push("电子书查看");
+                        tempArr.push("<a href='javascript:;' onclick='window.location.href=\"/users/userbooks/?updateuid="+value.updateuid +"\"'>" + value.updatename +"</a>");
                         tempArr.push(value.examinename);
                         tempArr.push(value.downcount);
                         tempArr.push(value.onlinecount);
