@@ -112,9 +112,9 @@
                             <span class="text">统计</span>
                         </a>
                         
-                        <a href="javascript:;" class="config" onclick="history.back()">
+                        <a href="javascript:;" class="config" id="downListen">
                             <i class="icon"></i>
-                            <span class="text">返回</span>
+                            <span class="text">下载</span>
                         </a>
                     </span>
                 </div>
@@ -140,7 +140,8 @@
         pageListen();
     });
 	$('select').select();
-	var head = [{
+	var head = [
+            {label:"下载",width:30},{
 				label: '图书名称',
 				width: 100,
 				sortable: 'default',
@@ -186,7 +187,6 @@
             sendAjaxForObj(1);
         })
     }
-
 	    function sendAjaxForObj (index) {
 	        // index = (index == null) ? 0 : index;
 	        $.ajax({
@@ -205,7 +205,8 @@
                     var currec = res.data.pageNum;
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
-                        // tempArr.push("<a href='javascript:;' target='_blank' onclick='window.parent.frames.location.href=\"/books/onlinebook?id="+value.id +"\"'>" + value.name +"</a>");
+                        // tempArr.push("<a href='javascriput:;'onclick='window.location.href=\"/books/downbooks?id="+value.id+"\"'>下载</a>");
+                        tempArr.push("<a href='/books/downbooks?id="+value.id+"'>下载</a>");
                         tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
                         tempArr.push(value.author);
 
@@ -250,9 +251,9 @@
 			thead: head,
 			tbody: null,
 			height:400,
-			checkbox: {
+			/*checkbox: {
 				single:true	
-			},
+			},*/
 			operator: {
 				type : "normal",
 				width : 100	

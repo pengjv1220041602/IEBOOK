@@ -2,8 +2,10 @@ package com.iebook.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.iebook.entry.Book;
+import com.iebook.entry.Log;
 import com.iebook.service.BookService;
 import com.iebook.service.KindService;
+import com.iebook.service.LogService;
 import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
@@ -45,6 +47,8 @@ public class BookController {
     private BookService bookService;
     @Autowired
     private KindService kindService;
+    @Autowired
+    private LogService logService;
 
     @RequestMapping(path = "/homebook")
     public String homeBook (Model model) {
@@ -63,23 +67,32 @@ public class BookController {
         return "/book/bookform";
     }
 
-    @RequestMapping(path = "/onlineread")
-    @ResponseBody
-    public void onlineread (HttpServletResponse response, @RequestParam("id") String id) throws IOException{
-       /* response.setContentType("application/octet-stream ");
-        response.setHeader("Connection", "close"); // 表示不能用浏览器直接打开
-        response.setHeader("Accept-Ranges", "bytes");// 告诉客户端允许断点续传多线程连接下载
-        response.setHeader("Content-Disposition",
-                "attachment;filename=" + new String(("财务统计.xls").getBytes("UTF-8"), "ISO8859-1"));*/
-        response.setCharacterEncoding("UTF-8");
+    @RequestMapping(path = "/downbooks")
+    public void downbooks (HttpServletResponse response, @RequestParam("id") String id) throws IOException {
 
         Book book = new Book();
         book.setId(id);
+        book.setDowncount(1);
+
+        logService.saveLog(new Log(id, Constants.ONLINE_DOWN.DOWN));
+        bookService.saveOrUpdateBook(book);
         book = bookService.getBook(book);
-        String path = this.bookpath + book.getPath();
-        File file = new File(path);
-        byte[] data = null;
+
+        response.setContentType("*/* ");
+        response.setHeader("Connection", "close"); // 表示不能用浏览器直接打开
+        response.setHeader("Accept-Ranges", "bytes");// 告诉客户端允许断点续传多线程连接下载
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + new String((book.getName() + ".pdf").getBytes("UTF-8"), "ISO8859-1"));
+        response.setCharacterEncoding("UTF-8");
+
+        downOrOnline(response, book);
+    }
+
+    private void downOrOnline(HttpServletResponse response, Book book) {
+        byte[] data;
         try {
+            String path = this.bookpath + book.getPath();
+            File file = new File(path);
             FileInputStream input = new FileInputStream(file);
             data = new byte[input.available()];
             input.read(data);
@@ -88,6 +101,20 @@ public class BookController {
         } catch (Exception e) {
             System.out.print("pdf文件处理异常：" + e.getMessage());
         }
+    }
+
+    @RequestMapping(path = "/onlineread")
+    @ResponseBody
+    public void onlineread (HttpServletResponse response, @RequestParam("id") String id) throws IOException{
+        response.setCharacterEncoding("UTF-8");
+        Book book = new Book();
+        book.setId(id);
+        book.setOnlinecount(1);
+
+        logService.saveLog(new Log(id, Constants.ONLINE_DOWN.ONLINE));
+        bookService.saveOrUpdateBook(book);
+        book = bookService.getBook(book);
+        downOrOnline(response, book);
     }
 
     @RequestMapping(path = "/editbookform")

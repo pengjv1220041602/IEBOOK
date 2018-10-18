@@ -47,13 +47,11 @@ public class BookServiceImpl implements BookService {
     public boolean saveOrUpdateBook(Book book) {
         int result = 0;
         book.setUpdatedate(new Date());
-        if (book.getExamine() == null || book.getExamine() == Constants.ExamineCode.WAIT_EXAMINE) {
-            book.setExamine(Constants.ExamineCode.WAIT_EXAMINE);
-        }
         book.setFlag(Constants.Code.EXIST_CODE);
         book.setUpdateuid("1111111111111111111");
         if (StringUtils.isBlank(book.getId())) {
             book.setId(Utils.getUUID());
+            book.setExamine(Constants.ExamineCode.WAIT_EXAMINE);
             book.setCreatedate(new Date());
             result = bookDao.saveBook(book);
         } else {

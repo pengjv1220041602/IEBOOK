@@ -12,6 +12,7 @@ import javax.servlet.MultipartConfigElement;
 @SpringBootApplication
 @MapperScan(basePackageClasses = UserDao.class)
 public class IEBookApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(IEBookApplication.class, args);
     }
@@ -29,4 +30,5 @@ public class IEBookApplication {
         factory.setMaxRequestSize("1024000KB");
         return factory.createMultipartConfig();
     }
+
 }

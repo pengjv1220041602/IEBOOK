@@ -5,6 +5,11 @@ package com.iebook.utils;
  */
 public class Constants {
 
+    public static class ONLINE_DOWN {
+        public static final int ONLINE = 1;
+        public static final int DOWN = 2;
+    }
+
     /**
      * @deprecation: 权限代码值
      *
