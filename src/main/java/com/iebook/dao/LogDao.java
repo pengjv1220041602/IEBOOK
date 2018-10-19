@@ -4,6 +4,7 @@ import com.iebook.dao.provider.LogDaoProvider;
 import com.iebook.entry.Log;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public interface LogDao {
 
     @SelectProvider(type = LogDaoProvider.class, method = "listLogsByCondition")
     List<Log> listLogsByCondition (Log log) ;
+
+    @SelectProvider(type = LogDaoProvider.class, method = "getPopularBooks")
+    List<Log> getPopularBooks(Log log);
+
+    @SelectProvider(type = LogDaoProvider.class, method = "countBookDownAndOnline")
+    List<Log> countBookDownAndOnline(@Param("bookids") List<String> bookids);
 }

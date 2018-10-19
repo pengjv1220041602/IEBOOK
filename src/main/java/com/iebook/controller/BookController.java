@@ -1,6 +1,7 @@
 package com.iebook.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.iebook.dao.LogDao;
 import com.iebook.entry.Book;
 import com.iebook.entry.Log;
 import com.iebook.service.BookService;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author ZhPJ
@@ -184,4 +186,25 @@ public class BookController {
         }
         return suffixPath + Utils.getUUID() + suffix;
     }
+
+    @RequestMapping(path = "/bookscounts")
+    public String bookscounts () {
+        return "/book/bookscounts";
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/bookscountsmap")
+    public Result bookscountsmap (Log log) {
+        if (log.getStartdate() == null || log.getEnddate() == null) {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONDAY + 1);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            log.setStartdate(String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day));
+        }
+        List list = logService.getPopularBooks(log);
+        return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, list);
+    }
+
+
 }

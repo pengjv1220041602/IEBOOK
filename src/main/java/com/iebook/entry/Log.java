@@ -17,8 +17,15 @@ public class Log {
     }
     private String id;
     private String bookid;
+    private String bookname;
     private Integer lineordown;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdate;
+    private String showdate;
     private Integer flag;
+    private String startdate;
+    private String enddate;
+
+    private int count;
+    private Integer limit;
 }
