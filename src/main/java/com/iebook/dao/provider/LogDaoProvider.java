@@ -5,8 +5,10 @@ import com.iebook.utils.Constants;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.security.KeyStore;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class LogDaoProvider {
 
@@ -50,53 +52,61 @@ public class LogDaoProvider {
                     WHERE("log.createdate between #{startdate} and #{enddate}");
                 } else if (log.getStartdate()!=null) {
                     AND();
-                    WHERE("createdate >= #{startdate}");
+                    WHERE("log.createdate >= #{startdate}");
                 } else if (log.getEnddate() != null){
                     AND();
-                    WHERE("#{enddate} >= createdate");
+                    WHERE("#{enddate} >= log.createdate");
                 }
-                GROUP_BY("bookid");
-                WHERE(" order by count(*) DESC limit 0, #{limit}");
+                GROUP_BY("bookid order by count DESC limit 0, #{limit} ");
+//                WHERE(" ");
             }
         }.toString();
         return sql;
     }
 
-    public String countBookDownAndOnline(List<String> bookids) {
+    public String countBookDownAndOnline(Map<String,Map<String, List<String>>> bookidsmap) {
+        List<String> bookids = bookidsmap.get("bookidsmap").get("bookids");
         String sql = new SQL(){
             {
-                selectBookEle();
-                WHERE("flag = " + Constants.Code.EXIST_CODE);
-                bookIdInIds();
-                WHERE("group by bookid");
-                WHERE("UNION ALL");
-                selectBookEle();
-                WHERE("flag = " + Constants.Code.EXIST_CODE);
-                bookIdInIds();
-                WHERE("group by bookid, createdate");
+                String select = "";
+                select += selectBookEle(true);
+                select += " where tlog.flag = " + Constants.Code.EXIST_CODE + " AND lineordown = 1";
+                select += bookIdInIds(bookids);
+                select += " group by showdate,  tbook.id";
+                select += " UNION ALL ";
+                select += selectBookEle(false);
+                select += " where tlog.flag = " + Constants.Code.EXIST_CODE +" AND lineordown = 2";
+                select += bookIdInIds(bookids);
+                select += " group by showdate,tbook.id";
+                SELECT(select);
             }
-            protected void selectBookEle() {
-                SELECT("count(tlog.lineordown) AS 'count'");
-                SELECT("DATE_FORMAT(tlog.createdate,'%Y-%m-%d') AS 'showdate'");
-                SELECT("tbook.name AS bookname");
-                FROM("tlog");
-                LEFT_OUTER_JOIN("tbook on tlog.bookid = tbook.id");
+            protected String selectBookEle(boolean flag) {
+
+                String select = flag ? "" : " select ";
+                select += "count(tlog.lineordown) AS 'count', "+(flag ? "1" : "2")+" AS lineordown,";
+                select += "DATE_FORMAT(tlog.createdate,'%Y-%m-%d') AS 'showdate',";
+                select += "tbook.`name` AS bookname, tbook.id AS bookid";
+                select += " from tlog left join tbook on tlog.bookid = tbook.`id`";
+                return select;
             }
 
-            protected void bookIdInIds(){
+            protected String bookIdInIds(List<String> bookids){
+                String sql = "";
                 if (bookids != null && bookids.size() > 0) {
-                    WHERE("bookid in ( ");
+                    sql += " and bookid in ( ";
                     for (int i = 0; i < bookids.size(); i++) {
+                        sql += "'" + bookids.get(i) + "'";
                         if (i != bookids.size() - 1) {
-                            WHERE(bookids.get(i) + ",");
+                            sql += ",";
                             continue;
                         }
-                        WHERE(bookids.get(i));
                     }
-                    WHERE(")");
+                    sql += ")";
                 }
+                return sql;
             }
         }.toString();
+        System.out.println(sql);
         return sql;
     }
 }

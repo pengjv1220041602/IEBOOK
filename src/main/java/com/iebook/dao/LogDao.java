@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface LogDao {
@@ -21,5 +22,5 @@ public interface LogDao {
     List<Log> getPopularBooks(Log log);
 
     @SelectProvider(type = LogDaoProvider.class, method = "countBookDownAndOnline")
-    List<Log> countBookDownAndOnline(@Param("bookids") List<String> bookids);
+    List<Log> countBookDownAndOnline(@Param(value = "bookidsmap") Map<String, List<String>> bookidsmap);
 }

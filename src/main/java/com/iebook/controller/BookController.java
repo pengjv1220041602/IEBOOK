@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author ZhPJ
@@ -198,12 +199,12 @@ public class BookController {
         if (log.getStartdate() == null || log.getEnddate() == null) {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONDAY + 1);
+            int month = calendar.get(Calendar.MONDAY) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             log.setStartdate(String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day));
         }
-        List list = logService.getPopularBooks(log);
-        return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, list);
+        Map<String, Object> popularBooks = logService.getPopularBooks(log);
+        return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, popularBooks);
     }
 
 
