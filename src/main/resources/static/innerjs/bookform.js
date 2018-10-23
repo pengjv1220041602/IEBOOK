@@ -20,7 +20,6 @@ function booksubmit() {
         formdata.append("detail", $("#detail").val());
         formdata.append("author", $("#author").val());
         formdata.append("bookpdf", $("#bookpdf").get(0).files[0]);
-
         $.ajax({
             url:"/books/saveorupdatebook",
             type:"post",
@@ -28,9 +27,10 @@ function booksubmit() {
             contentType: false,
             processData: false,
             data:formdata,
-            function (res) {
+            success:function (res) {
                 if (res.success) {
                     alert("添加成功！");
+                    window.location.href = "/books/bookform";
                 }
             }
         });
