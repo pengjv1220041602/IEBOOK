@@ -34,6 +34,8 @@ public class Book {
     private Integer downcount;
     private Integer onlinecount;
     private String author;
+    private String userid;
+    private Integer favourite;
     private String updateuid;
     private String updatename   ;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")

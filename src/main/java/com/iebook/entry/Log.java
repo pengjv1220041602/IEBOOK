@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ToString
@@ -26,6 +27,7 @@ public class Log {
     private String startdate;
     private String enddate;
 
+    private List<String> bookids;
     private int count;
     private Integer limit;
 }

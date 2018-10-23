@@ -30,4 +30,7 @@ public interface BookDao {
 
     @UpdateProvider(type = BookDaoProvider.class, method = "updateBook")
     int updateBook(Book book);
+
+    @UpdateProvider(type = BookDaoProvider.class, method = "lineOrDown")
+    int lineOrDown(Book book);
 }

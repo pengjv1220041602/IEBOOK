@@ -191,7 +191,7 @@
                     var currec = res.data.pageNum;
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
-                        tempArr.push(value.name);
+                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
                         tempArr.push(value.kind.name);
                         tempArr.push(value.examine == 1 ? '审核通过' : (value.examine == 0 ? '待审核' : '审核不通过'));
                         tempArr.push(value.examinename);
@@ -247,9 +247,6 @@
 			thead: head,
 			tbody: null,
 			height:400,
-			checkbox: {
-				single:true	
-			},
 			operator: {
 				type : "normal",
 				width : 100	
@@ -272,7 +269,7 @@
         });
     }
 	
-	$('.search-box input[type=radio]').click(function(e) {
+	/*$('.search-box input[type=radio]').click(function(e) {
         if($(this).prop('checked')){
 			if($(this).attr('data-define') === 'define'){
 				$('.define-input').show();
@@ -280,6 +277,6 @@
 				$('.define-input').hide();
 			}
 		}
-    });
+    });*/
 </script>
 </html>

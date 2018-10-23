@@ -2,12 +2,14 @@ package com.iebook.dao.provider;
 
 import com.iebook.entry.Book;
 import com.iebook.utils.Constants;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Author ZhPJ
@@ -58,20 +60,22 @@ public class BookDaoProvider {
         String sql = new SQL () {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
-                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
+                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount, tuserbook.favourite AS favourite");
                 SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
+
                 FROM("tbook book");
                 LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
                         , "tuser user2 on book.updateuid = user2.id"
-                        , "tkind on tkind.id = book.kindid");
+                        , "tkind on tkind.id = book.kindid"
+                        , "tuserbook on tuserbook.userid = #{userid} and tuserbook.bookid = book.id");
                 WHERE("book.flag = " + Constants.Code.EXIST_CODE);
                 if (StringUtils.isNotBlank(book.getName())) {
                     AND();
-                    WHERE("name like %#{name}%");
+                    WHERE("book.name like CONCAT(CONCAT('%',#{name},'%'))");
                 }
                 if (StringUtils.isNotBlank(book.getAuthor())) {
                     AND();
-                    WHERE("author like %#{author}%");
+                    WHERE("author like CONCAT(CONCAT('%',#{author},'%'))");
                 }
                 if (book.getKind() != null && StringUtils.isNotBlank(book.getKind().getId())) {
                     AND();
@@ -130,6 +134,23 @@ public class BookDaoProvider {
         return sql;
     }
 
+    public String lineOrDown (Book book) {
+        String sql = new SQL(){
+            {
+                UPDATE("tbook");
+                if (book.getDowncount() != null &&  book.getDowncount() == 1) {
+                    SET("downcount = downcount + 1");
+                }
+                if (book.getOnlinecount() != null && book.getOnlinecount() == 1) {
+                    SET("onlinecount = onlinecount + 1");
+                }
+                WHERE("id = #{id}");
+            }
+        }.toString();
+        System.out.println("linordown :" +sql);
+        return sql;
+    }
+
     public String updateBook (Book book) {
         String sql = new SQL() {
             {
@@ -170,6 +191,7 @@ public class BookDaoProvider {
                 WHERE("id = #{id}");
             }
         }.toString();
+        System.out.println("updateBook :" +sql);
         return sql;
     }
 }

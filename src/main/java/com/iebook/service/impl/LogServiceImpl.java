@@ -43,15 +43,13 @@ public class LogServiceImpl implements LogService {
         }
         Map<String, List<String>> mapParms = new HashMap<>();
         mapParms.put("bookids", bookids);
-
-
+        log.setBookids(bookids);
         // 返回的集合变量
-        List<String> bookcountsdown = new ArrayList<>();
-        List<String> bookcountsline = new ArrayList<>();
         List<String> bookdates = new ArrayList<>();
         List<String> booknames = new ArrayList<>();
+        Map<String, String> mapBookNames = new HashMap<>();
 
-        List<Log> logs = logDao.countBookDownAndOnline(mapParms);
+        List<Log> logs = logDao.countBookDownAndOnline(log);
         Map<String, List<List<String>>> mapcount = new LinkedHashMap<>();
         for (Log tempLog : logs) {
             if (!bookdates.contains(tempLog.getShowdate())) {
@@ -73,6 +71,7 @@ public class LogServiceImpl implements LogService {
                 }
                 booknames.add(tempLog.getBookname());
                 List<List<String>> ls = new ArrayList<>();
+                mapBookNames.put(tempLog.getBookid(), tempLog.getBookname());
                 ls.add(booknames);
                 ls.add(listdown);
                 ls.add(listline);
@@ -88,6 +87,7 @@ public class LogServiceImpl implements LogService {
             }
 
         }
+        result.put("bookmap", mapBookNames);
         result.put("booknames", booknames);
         result.put("bookcount", mapcount);
         result.put("bookdates", bookdates);

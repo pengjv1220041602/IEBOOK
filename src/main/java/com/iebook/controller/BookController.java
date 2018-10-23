@@ -4,10 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.iebook.dao.LogDao;
 import com.iebook.entry.Book;
 import com.iebook.entry.Log;
-import com.iebook.service.BookService;
-import com.iebook.service.KindService;
-import com.iebook.service.LogService;
-import com.iebook.service.UserService;
+import com.iebook.entry.User;
+import com.iebook.entry.UserBook;
+import com.iebook.service.*;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
 import com.iebook.utils.Utils;
@@ -21,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -40,10 +41,13 @@ import java.util.Map;
 @Controller
 @RequestMapping("/books")
 public class BookController {
+    private final String USER_SESSION = "usersession";
 
     @Value("${web.bookpath}")
     private String bookpath;
 
+    @Autowired
+    private UserBookService userBookService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -78,7 +82,7 @@ public class BookController {
         book.setDowncount(1);
 
         logService.saveLog(new Log(id, Constants.ONLINE_DOWN.DOWN));
-        bookService.saveOrUpdateBook(book);
+        bookService.lineOrDown(book);
         book = bookService.getBook(book);
 
         response.setContentType("*/* ");
@@ -113,9 +117,9 @@ public class BookController {
         Book book = new Book();
         book.setId(id);
         book.setOnlinecount(1);
-
+        book.setExamine(null);
         logService.saveLog(new Log(id, Constants.ONLINE_DOWN.ONLINE));
-        bookService.saveOrUpdateBook(book);
+        bookService.lineOrDown(book);
         book = bookService.getBook(book);
         downOrOnline(response, book);
     }
@@ -134,8 +138,8 @@ public class BookController {
 
     @RequestMapping(path = "/saveorupdatebook", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveOrUpdateBook (Book book) throws IOException {
-
+    public Result saveOrUpdateBook (HttpSession session, Book book) throws IOException {
+        User user = (User) session.getAttribute(USER_SESSION);
         MultipartFile picpathfile = book.getPicpathfile();
         if (picpathfile != null) {
             String filename = picpathfile.getOriginalFilename();
@@ -150,6 +154,8 @@ public class BookController {
             bookpdf.transferTo(new File(this.bookpath + bookpdfpath));
             book.setPath(bookpdfpath);
         }
+        book.setExamineuid(book.getExamine() != null ? user.getId() : null);
+        book.setUpdateuid(user.getId());
         boolean count = bookService.saveOrUpdateBook(book);
         if (count) {
             return new Result("添加成功！", Constants.Code.SUCCESS_CODE, count, null);
@@ -159,7 +165,9 @@ public class BookController {
 
     @RequestMapping(path = "/listbook", method = RequestMethod.POST)
     @ResponseBody
-    public Result listBook (int page, int size, Book book) {
+    public Result listBook (HttpSession session, int page, int size, Book book) {
+        User user  = (User) session.getAttribute(this.USER_SESSION);
+        book.setUserid(user.getId());
         PageInfo<Book> pageInfo = bookService.listBookByCondition(page, size, book);
         return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, pageInfo);
     }
@@ -207,5 +215,27 @@ public class BookController {
         return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, popularBooks);
     }
 
+    @RequestMapping(path = "/favourite")
+    public String favourite () {
+        return "/book/favourite";
+    }
+
+    @RequestMapping(path = "/favourite/datas")
+    @ResponseBody
+    public void favourite(HttpSession session, UserBook userBook) {
+         User user = (User) session.getAttribute(this.USER_SESSION);
+         userBook.setUserid(user.getId());
+         userBook.setFlag(Constants.Code.EXIST_CODE);
+        userBookService.saveOrUpdateUserBook(userBook);
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/favouritelist")
+    public Result favouritelist(HttpSession session, int page, int size, UserBook userBook) {
+         User user = (User) session.getAttribute(this.USER_SESSION);
+         userBook.setUserid(user.getId());
+        PageInfo pageInfo = userBookService.listMyFavourites(page, size, userBook);
+        return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, pageInfo);
+    }
 
 }

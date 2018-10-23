@@ -61,27 +61,39 @@ public class LogDaoProvider {
 //                WHERE(" ");
             }
         }.toString();
+        System.out.println(sql+"=========================");
         return sql;
     }
 
-    public String countBookDownAndOnline(Map<String,Map<String, List<String>>> bookidsmap) {
-        List<String> bookids = bookidsmap.get("bookidsmap").get("bookids");
+    public String countBookDownAndOnline(Log log) {
+        List<String> bookids = log.getBookids();
         String sql = new SQL(){
             {
                 String select = "";
                 select += selectBookEle(true);
-                select += " where tlog.flag = " + Constants.Code.EXIST_CODE + " AND lineordown = 1";
+                select += " where tlog.flag = " + Constants.Code.EXIST_CODE + " AND lineordown = 1" + selectBookDate(log);
                 select += bookIdInIds(bookids);
                 select += " group by showdate,  tbook.id";
                 select += " UNION ALL ";
                 select += selectBookEle(false);
-                select += " where tlog.flag = " + Constants.Code.EXIST_CODE +" AND lineordown = 2";
+                select += " where tlog.flag = " + Constants.Code.EXIST_CODE +" AND lineordown = 2" + selectBookDate(log);
                 select += bookIdInIds(bookids);
                 select += " group by showdate,tbook.id";
                 SELECT(select);
             }
-            protected String selectBookEle(boolean flag) {
 
+            protected String selectBookDate (Log log) {
+                if (log.getStartdate() != null && log.getEnddate() != null) {
+                    return " and tlog.createdate between #{startdate} and #{enddate}";
+                } else if (log.getStartdate() != null) {
+                    return " and tlog.createdate >= #{startdate}";
+                } else if (log.getEnddate() != null){
+                    return " and log.createdate  <= #{enddata}";
+                }
+                return "";
+            }
+
+            protected String selectBookEle(boolean flag) {
                 String select = flag ? "" : " select ";
                 select += "count(tlog.lineordown) AS 'count', "+(flag ? "1" : "2")+" AS lineordown,";
                 select += "DATE_FORMAT(tlog.createdate,'%Y-%m-%d') AS 'showdate',";

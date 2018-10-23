@@ -18,6 +18,8 @@ import java.util.Date;
 @ToString
 public class UserBook {
     private String bookid;
+    private Book book;
+    private  String kindname;
     private String userid;
     private int likecount;
     private int hatecount;

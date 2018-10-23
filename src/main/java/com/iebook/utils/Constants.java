@@ -5,6 +5,11 @@ package com.iebook.utils;
  */
 public class Constants {
 
+    public static class FavouriteCode {
+        public static final int FAVOURITE_CODE = 1;
+        public static final int NO_FAVOURITE_CODE = 0;
+    }
+
     public static class ONLINE_DOWN {
         public static final int ONLINE = 1;
         public static final int DOWN = 2;

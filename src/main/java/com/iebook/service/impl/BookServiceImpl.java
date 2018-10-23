@@ -47,9 +47,8 @@ public class BookServiceImpl implements BookService {
     public boolean saveOrUpdateBook(Book book) {
         int result = 0;
         book.setUpdatedate(new Date());
-        book.setFlag(Constants.Code.EXIST_CODE);
-        book.setUpdateuid("1111111111111111111");
         if (StringUtils.isBlank(book.getId())) {
+            book.setFlag(Constants.Code.EXIST_CODE);
             book.setId(Utils.getUUID());
             book.setExamine(Constants.ExamineCode.WAIT_EXAMINE);
             book.setCreatedate(new Date());
@@ -59,4 +58,10 @@ public class BookServiceImpl implements BookService {
         }
         return result > 0;
     }
+
+    @Override
+    public boolean lineOrDown (Book book) {
+        return bookDao.lineOrDown(book) > 0;
+    }
+
 }

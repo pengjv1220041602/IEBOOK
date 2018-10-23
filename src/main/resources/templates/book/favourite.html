@@ -112,9 +112,9 @@
                             <span class="text">统计</span>
                         </a>
                         
-                        <a href="javascript:;" class="config" onclick="history.back();">
+                        <a href="javascript:;" class="config" id="downListen">
                             <i class="icon"></i>
-                            <span class="text">返回</span>
+                            <span class="text">下载</span>
                         </a>
                     </span>
                 </div>
@@ -134,49 +134,31 @@
 <script type="text/javascript" src="../../js/jquery.pagination.js"></script>
 <script type="text/javascript" src="../../js/jquery.grid.js"></script>
 <script type="text/javascript" src="../../js/WdatePicker.js"></script>
-<script type="text/javascript" src="../../innerjs/comm.js"></script>
-
 <script type="text/javascript">
-    var getupdateuid = "";
-        $(function () {
-        getupdateuid = GetQueryString("updateuid");
+    $(function () {
         sendAjaxForObj(1);
         pageListen();
     });
 	$('select').select();
-	var head = [{
+	var head = [
+            {label:"下载",width:30},{
 				label: '图书名称',
-				width: 100,
+				width: 200,
 				sortable: 'default',
 				name: 'id'	
 			},{
                 label: '作者',
-                width: 100,
+                width: 200,
                 sortable: 'default',
                 name: 'author'
             },{
 				label:'所属类型',
-				width: 150,
+				width: 200,
 				sortable: 'default',
 				name:'name'	
 			},{
-				label:'上传者',
-				width:70
-			},{
-				label: '审核人',
-				width: 70
-			},{
-				label: '下载量',
-				width:70
-			},{
-                label: '查看量',
-                width:70
-            },{
-                label: '上传时间',
-                width:160
-            },{
                 label: '描述',
-                width:200
+                width:400
             }];
 			
 	var tbody = []
@@ -190,17 +172,15 @@
             sendAjaxForObj(1);
         })
     }
-
 	    function sendAjaxForObj (index) {
 	        // index = (index == null) ? 0 : index;
 	        $.ajax({
-                url : "/books/listbook",
+                url : "/books/favouritelist",
                 type : "post",
                 cache:false,
                 data : {
                     "page" : index ,
                     "size" : 10,
-                    "updateuid" : getupdateuid,
                     "examine" : 1,
                     "kind.id" : $("#kindsbook option:selected").val()
                 },
@@ -210,33 +190,23 @@
                     var currec = res.data.pageNum;
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
-                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
-                        tempArr.push(value.author);
-                        tempArr.push(value.kind.name);
-                        tempArr.push(value.updatename);
-                        tempArr.push(value.examinename);
-                        tempArr.push(value.downcount);
-                        tempArr.push(value.onlinecount);
-                        tempArr.push(value.updatedate);
-                        tempArr.push(value.detail);
-                        var oper = [{label:'删除',value:value.id,onclick:function(){
-                                if (confirm("确定删除？")) {
-                                    $.post(
-                                        "/books/saveorupdatebook",
-                                        {
-                                            "id":$(this)[0].value,
-                                            "flag" : 0
-                                        },
-                                        function (res) {
-                                            if (res != null && res.success) {
-                                                alert("删除成功！");
-                                                sendAjaxForObj(currec);
-                                            }
-                                        }
-                                    );
-                                }
-                            }},{label:'编辑',value:value.id,onclick: function(){
-                                window.location.href = "/books/editbookform?id="+$(this)[0].value;
+                        // tempArr.push("<a href='javascriput:;'onclick='window.location.href=\"/books/downbooks?id="+value.id+"\"'>下载</a>");
+                        tempArr.push("<a href='/books/downbooks?id="+value.bookid+"'>下载</a>");
+                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.bookid+" \", \"_blank\")'>" + value.book.name +"</a>");
+                        tempArr.push(value.book.author);
+
+                        tempArr.push(value.kindname);
+                        tempArr.push(value.book.detail);
+                        var fa = value.favourite == 1 ? '<img src="../../images/fa1.png"/>' : '<img style="width: 10px;height: 10px" src="../../images/fa2.png"/>';
+                        var oper = [{label:fa,value:value.id,onclick: function(){
+                                $.post("/books/favourite/datas",
+                                    {
+                                        bookid:value.bookid,
+                                        favourite:value.favourite == 1 ? 0 : 1
+                                    },
+                                    function (res) {
+                                        sendAjaxForObj(currec);
+                                    });
                             }}]
                         tempArr.push(oper);
                         tbody.push(tempArr);
@@ -253,6 +223,9 @@
 			thead: head,
 			tbody: null,
 			height:400,
+			/*checkbox: {
+				single:true	
+			},*/
 			operator: {
 				type : "normal",
 				width : 100	

@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <html style="height: 100%">
 <head>
     <meta charset="utf-8">
@@ -36,7 +37,9 @@
                     var tempObj2= {};
                     tempObj.type = 'bar';
                     tempObj.data = resultMap.bookcount[mapTemp][1];
+                    booknameList.push(resultMap.bookmap[mapTemp]);
                     tempObj2.type = 'bar';
+                    tempObj.name = resultMap.bookmap[mapTemp];
                     tempObj2.data = resultMap.bookcount[mapTemp][2];
                     series.push(tempObj);
                     series.push(tempObj2);
@@ -47,7 +50,7 @@
                         data:resultMap.bookdates
                     }],
                     legend:{
-                        data:resultMap.booknames
+                        data:booknameList
                     },
                     series:series
                 });
@@ -95,7 +98,7 @@
                 type: 'value',
                 name: '下载和查看量',//resultMap.bookname[0],
                 axisLabel: {
-                    formatter: '{value} ml'
+                    formatter: '{value} 本'
                 }
             }
         ],

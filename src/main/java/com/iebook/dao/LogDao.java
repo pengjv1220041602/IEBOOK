@@ -22,5 +22,5 @@ public interface LogDao {
     List<Log> getPopularBooks(Log log);
 
     @SelectProvider(type = LogDaoProvider.class, method = "countBookDownAndOnline")
-    List<Log> countBookDownAndOnline(@Param(value = "bookidsmap") Map<String, List<String>> bookidsmap);
+    List<Log> countBookDownAndOnline(Log log);
 }

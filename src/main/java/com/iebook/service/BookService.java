@@ -38,4 +38,11 @@ public interface BookService {
      */
     boolean saveOrUpdateBook (Book book);
 
+    /**
+     * @deprecation: 增加+1
+     *
+     * @param:
+     * @return:
+     */
+    boolean lineOrDown(Book book);
 }
