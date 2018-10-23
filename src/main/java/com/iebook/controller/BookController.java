@@ -206,6 +206,7 @@ public class BookController {
     public Result bookscountsmap (Log log) {
         if (log.getStartdate() == null || log.getEnddate() == null) {
             Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MONTH, -1);
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONDAY) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
