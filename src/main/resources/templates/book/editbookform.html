@@ -16,7 +16,7 @@ window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
 </script>
 <script type="text/javascript" src="../../js/umeditor.config.js"></script>
 <script type="text/javascript" src="../../umeditor/lang/zh-cn/zh-cn.js"></script>
-    <script type="text/javascript" src="../../innerjs/bookform.js"></script>
+    <script type="text/javascript" src="../../innerjs/editbook.js"></script>
 <title>基础信息</title>
 </head>
 
@@ -29,6 +29,7 @@ window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
             <h2 class="subfild">
             	<span>基本信息</span>
             </h2>
+            <input type="hidden" th:value="${book.id}" id="bookid"/>
             <div class="subfild-content base-info">
             	<div class="kv-item ue-clear">
                 	<label><span class="impInfo">*</span>电子书名称</label>
@@ -55,9 +56,10 @@ window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
                 </div>
                 <div class="kv-item ue-clear">
                     <label><span class="impInfo">*</span>图书图片</label>
+                    <img id="picbook" th:src="@{/books/picbook(id=${book.id})}" style="width: 40px; height: 40px">
                     <div class="kv-item-content file">
                         <span class="text"></span>
-                        <input type="file" />
+                        <input type="file" id="filepic" accept="image/*"/>
                         <input type="button" class="button normal long2" value="浏览.." />
                     </div>
                 </div>
@@ -65,7 +67,7 @@ window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
                     <label><span class="impInfo">*</span>上传电子书</label>
                     <div class="kv-item-content file">
                         <span class="text"></span>
-                        <input type="file" />
+                        <input type="file" id="bookpdf"  accept="application/pdf"/>
                         <input type="button" class="button normal long2" value="浏览.." />
                     </div>
                 </div>

@@ -61,7 +61,6 @@ public class LogDaoProvider {
 //                WHERE(" ");
             }
         }.toString();
-        System.out.println(sql+"=========================");
         return sql;
     }
 
@@ -118,7 +117,6 @@ public class LogDaoProvider {
                 return sql;
             }
         }.toString();
-        System.out.println(sql);
         return sql;
     }
 }

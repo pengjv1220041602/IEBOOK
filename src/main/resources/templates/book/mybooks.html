@@ -118,9 +118,6 @@
 				sortable: 'default',
 				name:'name'	
 			},{
-				label:'上传者',
-				width:70
-			},{
 				label: '审核人',
 				width: 70
 			},{
@@ -159,7 +156,7 @@
 	    function sendAjaxForObj (index) {
 	        // index = (index == null) ? 0 : index;
 	        $.ajax({
-                url : "/books/listbook",
+                url : "/books/listbookByOwn",
                 type : "post",
                 cache:false,
                 data : {
@@ -175,29 +172,16 @@
                     var currec = res.data.pageNum;
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
-                        // tempArr.push("<a href='javascriput:;'onclick='window.location.href=\"/books/downbooks?id="+value.id+"\"'>下载</a>");
                         tempArr.push("<a href='/books/downbooks?id="+value.id+"'>下载</a>");
                         tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
                         tempArr.push(value.author);
                         tempArr.push(value.kind.name);
-                        tempArr.push("<a href='javascript:;' onclick='window.location.href=\"/users/userbooks/?updateuid="+value.updateuid +"\"'>" + (value.updatename ==null?'':value.updatename ) +"</a>");
-                        tempArr.push(value.examinename == null ? '' : value.examinename);
+                        tempArr.push(value.examinename);
                         tempArr.push(value.downcount);
                         tempArr.push(value.onlinecount);
                         tempArr.push(value.updatedate);
-                        tempArr.push(value.detail == null ? '' : value.detail);
-                        var fa = value.favourite == 1 ? '<img src="../../images/fa1.png"/>' : '<img style="width: 10px;height: 10px" src="../../images/fa2.png"/>';
+                        tempArr.push(value.detail);
                         var oper = [
-                            {label:fa,value:value.id,onclick: function(){
-                                    $.post("/books/favourite/datas",
-                                        {
-                                            bookid:value.id,
-                                            favourite:value.favourite == 1 ? 0 : 1
-                                        },
-                                        function (res) {
-                                            sendAjaxForObj(currec);
-                                        });
-                            }},
                             {label:'删除',value:value.id,onclick:function(){
                                 if (confirm("确定删除？")) {
                                     $.post(

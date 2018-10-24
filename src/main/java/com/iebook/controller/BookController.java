@@ -92,13 +92,13 @@ public class BookController {
                 "attachment;filename=" + new String((book.getName() + ".pdf").getBytes("UTF-8"), "ISO8859-1"));
         response.setCharacterEncoding("UTF-8");
 
-        downOrOnline(response, book);
+        downOrOnline(response, book, true);
     }
 
-    private void downOrOnline(HttpServletResponse response, Book book) {
+    private void downOrOnline(HttpServletResponse response, Book book, boolean flag) {
         byte[] data;
         try {
-            String path = this.bookpath + book.getPath();
+            String path = this.bookpath + (flag?book.getPath() : book.getPicpath());
             File file = new File(path);
             FileInputStream input = new FileInputStream(file);
             data = new byte[input.available()];
@@ -121,7 +121,16 @@ public class BookController {
         logService.saveLog(new Log(id, Constants.ONLINE_DOWN.ONLINE));
         bookService.lineOrDown(book);
         book = bookService.getBook(book);
-        downOrOnline(response, book);
+        downOrOnline(response, book, true);
+    }
+
+    @RequestMapping(path = "/picbook")
+    @ResponseBody
+    public void picbook (HttpServletResponse response, @RequestParam("id") String id) throws IOException{
+        Book book = new Book();
+        book.setId(id);
+        book = bookService.getBook(book);
+        downOrOnline(response, book, false);
     }
 
     @RequestMapping(path = "/editbookform")
@@ -217,7 +226,8 @@ public class BookController {
     }
 
     @RequestMapping(path = "/favourite")
-    public String favourite () {
+    public String favourite (Model model) {
+        model.addAttribute("kinds", kindService.listKind());
         return "/book/favourite";
     }
 
@@ -239,4 +249,19 @@ public class BookController {
         return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, pageInfo);
     }
 
+    @RequestMapping(path = "/mybooks")
+    public String mybooks (Model model) {
+        model.addAttribute("kinds", kindService.listKind());
+        return "/book/mybooks";
+    }
+
+    @RequestMapping(path = "/listbookByOwn")
+    @ResponseBody
+    public Result listbookByOwn (HttpSession session, int page, int size, Book book) {
+        User user  = (User) session.getAttribute(this.USER_SESSION);
+        book.setUserid(user.getId());
+        book.setUpdateuid(user.getId());
+        PageInfo<Book> pageInfo = bookService.listBookByCondition(page, size, book);
+        return new Result("查询成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, pageInfo);
+    }
 }

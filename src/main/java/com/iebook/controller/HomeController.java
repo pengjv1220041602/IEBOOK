@@ -5,11 +5,11 @@ import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -28,7 +28,7 @@ public class HomeController {
 
     @RequestMapping(value = "/login")
     public String loginHtml () {
-        return "login";
+        return "/login";
     }
 
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
@@ -44,6 +44,15 @@ public class HomeController {
             return  new Result("exception", Constants.Code.EXCEPTION_CODE, Boolean.FALSE, null);
         }
         return new Result("error", Constants.Code.ERROR_CODE, Boolean.FALSE,null);
+    }
+
+    @RequestMapping(path = "/saveuser")
+    @ResponseBody
+    public Result saveuser(HttpSession session, @RequestParam(required = false, defaultValue = "false") boolean loginInfo, User user){
+        if (userService.saveUser(user)) {
+            return new Result("修改成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, null);
+        }
+        return new Result("修改失败！", Constants.Code.ERROR_CODE, Boolean.FALSE, null);
     }
 
     @RequestMapping(path = {"/nav", ""}, method = RequestMethod.GET)

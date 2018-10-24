@@ -50,10 +50,20 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isNotBlank(user.getId())) {
               return userDao.updateUser(user) > 0 ;
         }
+       return saveUserTo(user);
+    }
+
+    private boolean saveUserTo (User user) {
         user.setCreatedate(new Date());
         user.setPower(Constants.PowerCode.USER_CODE);
         user.setFlag(Constants.Code.EXIST_CODE);
         user.setId(Utils.getUUID());
-        return userDao.saveUser(user) > 0;
+        return  userDao.saveUser(user) > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean saveUser(User user){
+        return saveUserTo(user);
     }
 }

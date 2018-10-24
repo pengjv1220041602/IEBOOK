@@ -37,4 +37,5 @@ public interface UserService {
      */
     boolean saveOrUpdateUser (User user) ;
 
+    boolean saveUser (User user);
 }
