@@ -129,5 +129,34 @@
 			 $('.more-bab-list').hide();
 		}
     });
+	
+	window.onload = function () {
+		getpower();
+	}
+	function getpower() {
+		$.ajax({
+	        url:"/setSession",
+	        type:"post",
+	        success:function (res) {
+				if (res.data == 0) {
+					var str = $('.nav li ul li');
+					console.log(str);
+					for(var i = 0; i <= str.length; i++) {
+						if (str[i].innerText == '审核电子书') {
+							str[i].hidden = true;
+							console.log(str[i]);
+						}
+						if (str[i].innerText == '用户列表') {
+							str[i].hidden = true;
+							console.log(str[i]);
+						}
+					}
+				}
+	        },
+	        error : function (res) {
+	            
+	        }
+	    })
+	}
 </script>
 </html>

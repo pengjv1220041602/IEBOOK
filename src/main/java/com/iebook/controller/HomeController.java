@@ -7,6 +7,7 @@ import com.iebook.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +39,8 @@ public class HomeController {
             user = userService.login(user);
             if (user != null) {
                 session.setAttribute(USER_SESSION, user);
+                session.setAttribute("power", user.getPower());
+                setSession(session, user);
                 return new Result("success", Constants.Code.SUCCESS_CODE, Boolean.TRUE, user);
             }
         } catch (Exception e) {
@@ -53,6 +56,14 @@ public class HomeController {
             return new Result("修改成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, null);
         }
         return new Result("修改失败！", Constants.Code.ERROR_CODE, Boolean.FALSE, null);
+    }
+    
+    @RequestMapping(path = "/setSession", method = RequestMethod.POST)
+    @ResponseBody
+    private static Result setSession (HttpSession session, User user) {
+    	//session.setAttribute("power", user.getPower());
+    	System.out.println("session:" + session.getAttribute("power"));
+    	return new Result("success", Constants.Code.SUCCESS_CODE, Boolean.TRUE, session.getAttribute("power"));
     }
 
     @RequestMapping(path = {"/nav", ""}, method = RequestMethod.GET)

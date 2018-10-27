@@ -26,7 +26,8 @@ function login() {
         },
         success:function (res) {
             if (res.success) {
-               location.href = "/main";
+            	console.log(res.data.power);
+                location.href = "/main";
             }
         },
         error : function (res) {
