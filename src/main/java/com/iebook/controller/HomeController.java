@@ -66,12 +66,12 @@ public class HomeController {
     	return new Result("success", Constants.Code.SUCCESS_CODE, Boolean.TRUE, session.getAttribute("power"));
     }
 
-    @RequestMapping(path = {"/nav", ""}, method = RequestMethod.GET)
+    @RequestMapping(path = "/nav", method = RequestMethod.GET)
     public String home () {
         return "/home/nav";
     }
 
-    @RequestMapping(path = "/main")
+    @RequestMapping(path = {"/main", ""})
     public String main (Model model) {
         return "/home/main";
     }

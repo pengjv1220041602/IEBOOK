@@ -19,6 +19,7 @@ public class SessionIntercept extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(myInterceptor).addPathPatterns("/main/**");//配置登录拦截器拦截路径
+        registry.addInterceptor(myInterceptor).addPathPatterns("/");//配置登录拦截器拦截路径
         registry.addInterceptor(myInterceptor).addPathPatterns("/books/**");//配置登录拦截器拦截路径
         registry.addInterceptor(myInterceptor).addPathPatterns("/kinds/**");//配置登录拦截器拦截路径
         registry.addInterceptor(myInterceptor).addPathPatterns("/users/**");//配置登录拦截器拦截路径
