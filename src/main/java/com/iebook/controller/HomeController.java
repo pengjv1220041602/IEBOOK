@@ -1,19 +1,27 @@
 package com.iebook.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+import com.iebook.entry.Book;
+import com.iebook.entry.Log;
 import com.iebook.entry.User;
+import com.iebook.service.BookService;
+import com.iebook.service.LogService;
 import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Random;
 
 /**
  * @Author ZhPJ
@@ -26,12 +34,91 @@ public class HomeController {
     private final String USER_SESSION = "usersession";
     @Autowired
     private UserService userService;
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
+    private LogService logService;
+
+
+    @Value("${web.bookpath}")
+    private String picpath;
 
     @RequestMapping(value = "/login")
     public String loginHtml () {
         return "/login";
     }
 
+    @RequestMapping(path = {"index","/"})
+    public String index (Book book, Model model) {
+        Random random = new Random();
+        int i = random.nextInt();
+        int page = i > 20 ? 1 : i;
+        book.setExamine(Constants.ExamineCode.PASS);
+        PageInfo<Book> pageInfo = bookService.listBookByCondition(page, 30, book);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", book.getName());
+        return "/index";
+    }
+
+    @RequestMapping(path = "/bookpic/{id}/{flag}")
+    @ResponseBody
+    public void index (HttpServletResponse response, @PathVariable("id") String id, @PathVariable("flag") Integer flag,  Model model) {
+        Book book = new Book();
+        book.setId(id);
+        book = bookService.getBook(book);
+        downOrOnline(response, book, flag );
+    }
+    private void downOrOnline(HttpServletResponse response, Book book, int flag) {
+        byte[] data;
+        try {
+            String path = "";//this.picpath + (flag?book.getPath() : book.getPicpath());
+            if (flag == 0) {
+                path = this.picpath +  book.getPicpath();
+            } else if (flag == 1){
+                path = this.picpath + book.getPicpath1();
+            } else if (flag == 2) {
+                path = this.picpath + book.getPicpath2();
+            } else if (flag == 3) {
+                path = this.picpath + book.getPicpath3();
+            } else if (flag == 4) {
+                path = this.picpath + book.getPath();
+            }
+            File file = new File(path);
+            FileInputStream input = new FileInputStream(file);
+            data = new byte[input.available()];
+            input.read(data);
+            response.getOutputStream().write(data);
+            input.close();
+        } catch (Exception e) {
+            System.out.print("pdf文件处理异常：" + e.getMessage());
+        }
+    }
+
+
+    @RequestMapping(path = "/downbooks")
+    public void downbooks (HttpServletResponse response, @RequestParam("id") String id) throws IOException {
+        Book book = new Book();
+        book.setId(id);
+        book.setDowncount(1);
+
+        logService.saveLog(new Log(id, Constants.ONLINE_DOWN.DOWN));
+        bookService.lineOrDown(book);
+        book = bookService.getBook(book);
+
+        response.setContentType("*/* ");
+        response.setHeader("Connection", "close"); // 表示不能用浏览器直接打开
+        response.setHeader("Accept-Ranges", "bytes");// 告诉客户端允许断点续传多线程连接下载
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + new String((book.getName() + ".pdf").getBytes("UTF-8"), "ISO8859-1"));
+        response.setCharacterEncoding("UTF-8");
+
+        downOrOnline(response, book, 4);
+    }
+    @RequestMapping("/onlinebook")
+    public String onlineBook () {
+        return "/book/onlinebook";
+    }
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
     @ResponseBody
     public Result userLogin (HttpSession session, User user) {
@@ -71,9 +158,18 @@ public class HomeController {
         return "/home/nav";
     }
 
-    @RequestMapping(path = {"/main", ""})
+    @RequestMapping(path = {"/main"})
     public String main (Model model) {
         return "/home/main";
+    }
+
+    @RequestMapping("/bookdetail/{id}")
+    public String bookdetail (HttpServletResponse response, Model model, @PathVariable("id") String id) {
+        Book book = new Book();
+        book.setId(id);
+        book = bookService.getBook(book);
+        model.addAttribute("book", book);
+        return "/details";
     }
 
     @RequestMapping(path = "/regist")

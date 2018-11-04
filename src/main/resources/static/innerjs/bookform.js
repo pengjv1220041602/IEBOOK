@@ -16,6 +16,9 @@ function booksubmit() {
         if (validateForm()) return;
         var formdata = new FormData();
         formdata.append("picpathfile", $("#bookpic").get(0).files[0]);
+        formdata.append("picpathfile1", $("#bookpic1").get(0).files[0]);
+        formdata.append("picpathfile2", $("#bookpic2").get(0).files[0]);
+        formdata.append("picpathfile3", $("#bookpic3").get(0).files[0]);
         formdata.append("name", $("#name").val());
         formdata.append("kind.id", $("#kind option:selected").val());
         formdata.append("detail", $("#detail").val());
@@ -38,8 +41,26 @@ function booksubmit() {
     });
 }
 function bookpic() {
+    $("#filebook1").on("click", function () {
+        $("#bookpic1").click();
+    });
+    $("#filebook2").on("click", function () {
+        $("#bookpic2").click();
+    });
+    $("#filebook3").on("click", function () {
+        $("#bookpic3").click();
+    });
     $("#bookpic").on("change", function () {
         return_image($("#bookpic")[0], $("#picbook"));
+    });
+    $("#bookpic1").on("change", function () {
+        return_image($("#bookpic1")[0], $("#picbook1"));
+    });
+    $("#bookpic2").on("change", function () {
+        return_image($("#bookpic2")[0], $("#picbook2"));
+    });
+    $("#bookpic3").on("change", function () {
+        return_image($("#bookpic3")[0], $("#picbook3"));
     });
 }
 /* 回显图片 */

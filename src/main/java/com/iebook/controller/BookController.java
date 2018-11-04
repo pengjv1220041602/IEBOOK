@@ -156,6 +156,29 @@ public class BookController {
             picpathfile.transferTo(new File(this.bookpath + dirsPath));
             book.setPicpath(dirsPath);
         }
+        MultipartFile picpathfile1 = book.getPicpathfile1();
+        if (picpathfile1 != null) {
+            String filename = picpathfile1.getOriginalFilename();
+            String dirsPath = this.dirsPath(book.getKind().getId(), filename);
+            picpathfile1.transferTo(new File(this.bookpath + dirsPath));
+            book.setPicpath1(dirsPath);
+        }
+        MultipartFile picpathfile2 = book.getPicpathfile2();
+        if (picpathfile2 != null) {
+            String filename = picpathfile2.getOriginalFilename();
+            String dirsPath = this.dirsPath(book.getKind().getId(), filename);
+            picpathfile2.transferTo(new File(this.bookpath + dirsPath));
+            book.setPicpath2(dirsPath);
+        }
+        MultipartFile picpathfile3 = book.getPicpathfile3();
+        if (picpathfile3 != null) {
+            String filename = picpathfile3.getOriginalFilename();
+            String dirsPath = this.dirsPath(book.getKind().getId(), filename);
+            picpathfile3.transferTo(new File(this.bookpath + dirsPath));
+            book.setPicpath3(dirsPath);
+        }
+
+
 
         MultipartFile bookpdf = book.getBookpdf();
         if (bookpdf != null) {

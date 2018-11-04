@@ -27,6 +27,12 @@ public class Book {
     private MultipartFile bookpdf;
     private String picpath;
     private MultipartFile picpathfile;
+    private String picpath1;
+    private MultipartFile picpathfile1;
+    private String picpath2;
+    private MultipartFile picpathfile2;
+    private String picpath3;
+    private MultipartFile picpathfile3;
     private String detail;
     private Integer examine;
     private String examineuid;

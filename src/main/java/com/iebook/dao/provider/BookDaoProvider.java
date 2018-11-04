@@ -23,7 +23,7 @@ public class BookDaoProvider {
         String sql = new SQL() {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
-                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
+                SELECT("picpath,picpath1, picpath2, picpath3, detail, examine, user1.name AS examinename", "downcount, onlinecount");
                 SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
                 FROM("tbook book");
                 LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
@@ -41,7 +41,7 @@ public class BookDaoProvider {
         String sql = new SQL() {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
-                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount");
+                SELECT("picpath, picpath1, picpath2, picpath3, detail, examine, user1.name AS examinename", "downcount, onlinecount");
                 SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
                 FROM("tbook book");
                 LEFT_OUTER_JOIN("tuser user1 on book.examineuid = user1.id"
@@ -60,7 +60,7 @@ public class BookDaoProvider {
         String sql = new SQL () {
             {
                 SELECT("book.id AS id, book.`name` AS name, tkind.id AS 'kind.id', tkind.name AS 'kind.name', isbn, path");
-                SELECT("picpath, detail, examine, user1.name AS examinename", "downcount, onlinecount, tuserbook.favourite AS favourite");
+                SELECT("picpath,picpath1, picpath2, picpath3, detail, examine, user1.name AS examinename", "downcount, onlinecount, tuserbook.favourite AS favourite");
                 SELECT("author,user2.id AS updateuid, user2.name AS updatename, book.createdate AS createdate, book.updatedate AS updatedate");
 
                 FROM("tbook book");
@@ -107,6 +107,9 @@ public class BookDaoProvider {
                 VALUES("kindid", "#{kind.id}");
                 VALUES("path", "#{path}");
                 VALUES("picpath", "#{picpath}");
+                VALUES("picpath1", "#{picpath1}");
+                VALUES("picpath2", "#{picpath2}");
+                VALUES("picpath3", "#{picpath3}");
                 VALUES("examine", "#{examine}");
                 VALUES("examineuid", "#{examineuid}");
                 VALUES("updateuid", "#{updateuid}");
@@ -168,6 +171,15 @@ public class BookDaoProvider {
                 }
                 if (StringUtils.isNotBlank(book.getPicpath())) {
                     SET("picpath = #{picpath}");
+                }
+                if (StringUtils.isNotBlank(book.getPicpath())) {
+                    SET("picpath1 = #{picpath1}");
+                }
+                if (StringUtils.isNotBlank(book.getPicpath())) {
+                    SET("picpath2 = #{picpath2}");
+                }
+                if (StringUtils.isNotBlank(book.getPicpath())) {
+                    SET("picpath3 = #{picpath3}");
                 }
                 if (StringUtils.isNotBlank(book.getDetail())) {
                     SET("detail = #{detail}");
