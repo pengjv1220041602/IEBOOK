@@ -8,12 +8,14 @@ import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * @Author ZhPJ
@@ -25,6 +27,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
     private final String USER_SESSION = "usersession";
+    @Value("${web.photo}")
+    private String photoFile;
     @Autowired
     private UserService userService;
     @Autowired
@@ -82,4 +86,29 @@ public class UserController {
         return "/user/userbooks";
     }
 
+    @GetMapping("/photo")
+    public void photo (HttpServletResponse response, HttpSession session) {
+        final  User user= (User)session.getAttribute(this.USER_SESSION);
+        downOrOnline(response, user);
+    }
+    private void downOrOnline(HttpServletResponse response, User user) {
+        byte[] data;
+        try {
+            String path = this.photoFile + user.getPhoto();
+            File file = new File(path);
+            FileInputStream input = new FileInputStream(file);
+            data = new byte[input.available()];
+            input.read(data);
+            response.getOutputStream().write(data);
+            input.close();
+        } catch (Exception e) {
+            System.out.print("pdf文件处理异常：" + e.getMessage());
+        }
+    }
+    @PostMapping("/logout")
+    @ResponseBody
+    public Boolean logout(HttpSession session) {
+        session.removeAttribute(this.USER_SESSION);
+        return true;
+    }
 }

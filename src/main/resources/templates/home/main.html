@@ -17,22 +17,22 @@
     	<div class="hd-top">
             <h1 class="logo"><a href="javascript:;" class="logo-icon"></a></h1>
             <div class="user-info">
-                <a href="javascript:;" class="user-avatar"><span><i class="info-num">2</i></span></a>
+                <a href="javascript:;" class="user-avatar"><span><!--<i class="info-num">2</i>--><img src="/users/photo" style="width: 45px; height: 45px;"/></span></a>
                 <span class="user-name">admin</span>
                 <a href="javascript:;" class="more-info"></a>
             </div>
             <div class="setting ue-clear">
             	<div class="setting-skin">
-                	<div class="switch-bar">
+                	<!--<div class="switch-bar">
                     	<i class="skin-icon"></i>
                         <span class="text">皮肤</span>
                         <i class="arrow-icon"></i>
-                    </div>
+                    </div>-->
                 </div>
                 <ul class="setting-main ue-clear">
-                	<li><a href="javascript:;">桌面</a></li>
+                	<!--<li><a href="javascript:;">桌面</a></li>-->
                     <li><a href="javascript:;">设置</a></li>
-                    <li><a href="javascript:;">帮助</a></li>
+                    <!--<li><a href="javascript:;">帮助</a></li>-->
                     <li><a href="javascript:;" class="close-btn exit"></a></li>
                 </ul>
             </div>
@@ -149,10 +149,14 @@ $('.exit').click(function(){
 
 $('.exitDialog input[type=button]').click(function(e) {
     $('.exitDialog').Dialog('close');
-	
-	if($(this).hasClass('ok')){
-		window.location.href = "login.html"	;
-	}
+
+    if($(this).hasClass('ok')){
+        $.post("/users/logout",{}, function (res) {
+            if (res) {
+                window.location.href = "/";
+            }
+        });
+    }
 });
 
 (function(){

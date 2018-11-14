@@ -7,9 +7,7 @@ import com.iebook.entry.Log;
 import com.iebook.entry.User;
 import com.iebook.entry.UserBook;
 import com.iebook.service.*;
-import com.iebook.utils.Constants;
-import com.iebook.utils.Result;
-import com.iebook.utils.Utils;
+import com.iebook.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -178,8 +176,6 @@ public class BookController {
             book.setPicpath3(dirsPath);
         }
 
-
-
         MultipartFile bookpdf = book.getBookpdf();
         if (bookpdf != null) {
             String bookpdfpath = this.dirsPath(book.getKind().getId(), bookpdf.getOriginalFilename());
@@ -189,6 +185,14 @@ public class BookController {
         book.setExamineuid(book.getExamine() != null ? user.getId() : null);
         book.setUpdateuid(user.getId());
         boolean count = bookService.saveOrUpdateBook(book);
+        if (Constants.ExamineCode.PASS == book.getExamine().intValue() || Constants.ExamineCode.NO_PASS == book.getExamine().intValue()) {
+            MailSend mailSend = new MailSend();
+            final Book book1 = bookService.getBook(book);
+            User u = new User();
+            u.setId(book1.getUpdateuid());
+            final User u2 = userService.getUser(u);
+            mailSend.sendMail(book.getExamine(), book1.getName(), u2.getEmail());
+        }
         if (count) {
             return new Result("添加成功！", Constants.Code.SUCCESS_CODE, count, null);
         }

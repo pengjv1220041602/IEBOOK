@@ -5,6 +5,8 @@ import com.iebook.utils.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.Set;
+
 /**
  * @Author ZhPJ
  * @Date 2018/10/15 001513:47
@@ -40,11 +42,17 @@ public class UserDaoProvider {
                 if (user.getPower() != null && (user.getPower() == Constants.PowerCode.ADMIN_CODE || user.getPower() == Constants.PowerCode.USER_CODE)) {
                     SET("power = #{power}" );
                 }
+                if (user.getEmail() != null && user.getEmail() != null) {
+                    SET("email = #{email}");
+                }
                 if (user.getFlag() != null && (user.getFlag() == Constants.Code.EXIST_CODE || user.getFlag() == Constants.Code.NO_EXIST_CODE)) {
                     SET("flag = #{flag}" );
                 }
                 if (user.getUpdatedate() != null) {
                     SET("updatedate = #{updatedate}" );
+                }
+                if (user.getPhoto() != null) {
+                    SET("photo = #{hoto}" );
                 }
                 SET("updatedate = #{updatedate}");
                 WHERE("tuser.id = #{id}");

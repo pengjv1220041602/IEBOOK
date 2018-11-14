@@ -6,6 +6,7 @@ import com.iebook.dao.UserDao;
 import com.iebook.entry.User;
 import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
+import com.iebook.utils.MailSend;
 import com.iebook.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class UserServiceImpl implements UserService {
         user.setPower(Constants.PowerCode.USER_CODE);
         user.setFlag(Constants.Code.EXIST_CODE);
         user.setId(Utils.getUUID());
+        MailSend mailSend = new MailSend();
+        mailSend.sendMail(3, null, user.getEmail());
         return  userDao.saveUser(user) > 0;
     }
 

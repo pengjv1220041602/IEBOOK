@@ -24,8 +24,8 @@ public class MyInterceptor implements HandlerInterceptor {
         if(user!=null){
             return true;
         }
-        else{
-            httpServletResponse.sendRedirect(httpServletRequest.getContextPath()+"/login.html");  //未登录自动跳转界面
+        else{//httpServletRequest.getContextPath()+
+            httpServletResponse.sendRedirect("/login");  //未登录自动跳转界面
             return false;
         }
     }

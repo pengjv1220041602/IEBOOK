@@ -3,7 +3,7 @@ server:
 spring:
   application.name: iebook
   datasource:
-     url: jdbc:mysql://127.0.0.1:3306/iebook?useUnicode=true&characterEncoding=utf-8
+     url: jdbc:mysql://localhost:3306/iebook?useUnicode=true&characterEncoding=utf-8
      username: root
      password: root
      driver-class-name: com.mysql.jdbc.Driver
@@ -21,3 +21,4 @@ pagehelper:
 web:
   basepath: E:/files/
   bookpath: ${web.basepath}bookpath/
+  photo: ${web.basepath}photo/

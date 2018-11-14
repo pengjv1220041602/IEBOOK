@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>HTML5响应式用户登录界面模板</title>
+  <title>电子书</title>
   <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
   <meta name="author" content="Vincent Garreau" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -35,11 +35,12 @@
 			<div class="login-center clearfix">
 				<div class="login-center-img"><img src="../../login/img/yzm.png"/></div>
 				<div class="login-center-input">
-					<input style="width: 100px" type="text" class="inuser" value="" placeholder="请输入验证码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入验证码'"/>
+					<input style="width: 100px" type="text" class="inuser" value="" placeholder="请输入验证码" onfocus="this.placeholder=''" id="txt-code" onblur="this.placeholder='请输入验证码'"/>
+					<img src="/viCode?rand=2323423" alt="" id="img-code" onclick="refreshVi()"/>
 					<div class="login-center-input-text">验证码</div>
 				</div>
 			</div>
-			<span style = "padding-left: 50px">错误</span>
+			<span style = "padding-left: 50px" id="tip-error"></span>
 			<div class="login-button" id="btnLogin">登录</div>
 		</div>
 		<div class="sk-rotating-plane"></div>

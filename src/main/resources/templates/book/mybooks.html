@@ -172,8 +172,8 @@
                     var currec = res.data.pageNum;
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
-                        tempArr.push("<a href='/books/downbooks?id="+value.id+"'>下载</a>");
-                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
+                        tempArr.push("<a href='/books/downbooks/0?id="+value.id+"'>下载</a>");
+                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook/0?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
                         tempArr.push(value.author);
                         tempArr.push(value.kind.name);
                         tempArr.push(value.examinename);

@@ -4,7 +4,9 @@ $(function () {
     // 表单触发事件
     formListen();
 });
-
+function refreshVi () {
+    $("#img-code").prop("src", "/viCode?rand="+new Date());
+}
 function loginInit() {
     
 }
@@ -22,12 +24,17 @@ function login() {
         type:"post",
         data:{
             username : $("#username").val(),
-            password : $("#password").val()
+            password : $("#password").val(),
+            code : $("#txt-code").val()
         },
         success:function (res) {
             if (res.success) {
             	console.log(res.data.power);
                 location.href = "/main";
+            } else {
+                $("#img-code").prop("src", "");
+                $("#img-code").prop("src", "/viCode?rand="+new Date());
+                $("#tip-error").text(res.message)
             }
         },
         error : function (res) {

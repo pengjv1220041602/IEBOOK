@@ -10,18 +10,21 @@ import com.iebook.service.LogService;
 import com.iebook.service.UserService;
 import com.iebook.utils.Constants;
 import com.iebook.utils.Result;
+import com.iebook.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @Author ZhPJ
@@ -32,6 +35,8 @@ import java.util.Random;
 @Controller
 public class HomeController {
     private final String USER_SESSION = "usersession";
+    @Value("${web.photo}")
+    private String photoFile;
     @Autowired
     private UserService userService;
     @Autowired
@@ -47,6 +52,12 @@ public class HomeController {
     @RequestMapping(value = "/login")
     public String loginHtml () {
         return "/login";
+    }
+
+    @RequestMapping(value = "/viCode")
+    public void viCode (HttpServletResponse response, HttpSession session) throws IOException {
+        final String s = VerifyCodeUtils.outputVerifyImage(100, 35, response.getOutputStream(), 4);
+        session.setAttribute("code", s);
     }
 
     @RequestMapping(path = {"index","/"})
@@ -122,7 +133,12 @@ public class HomeController {
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
     @ResponseBody
     public Result userLogin (HttpSession session, User user) {
+        String code = (String)session.getAttribute("code");
+
         try {
+            if (!code.equalsIgnoreCase(user.getCode())) {
+                return new Result("验证码错误", Constants.Code.ERROR_CODE, Boolean.FALSE, user);
+            }
             user = userService.login(user);
             if (user != null) {
                 session.setAttribute(USER_SESSION, user);
@@ -131,17 +147,28 @@ public class HomeController {
                 return new Result("success", Constants.Code.SUCCESS_CODE, Boolean.TRUE, user);
             }
         } catch (Exception e) {
-            return  new Result("exception", Constants.Code.EXCEPTION_CODE, Boolean.FALSE, null);
+            return  new Result("用户名或密码错误", Constants.Code.EXCEPTION_CODE, Boolean.FALSE, null);
         }
-        return new Result("error", Constants.Code.ERROR_CODE, Boolean.FALSE,null);
+        return new Result("用户名或密码错误", Constants.Code.ERROR_CODE, Boolean.FALSE,null);
     }
 
     @RequestMapping(path = "/saveuser")
     @ResponseBody
-    public Result saveuser(HttpSession session, @RequestParam(required = false, defaultValue = "false") boolean loginInfo, User user){
+    public Result saveuser(HttpSession session,
+                           @RequestParam(required = false, defaultValue = "false") boolean loginInfo, User user) throws IOException {
+        String filename = user.getPhfile().getOriginalFilename();
+        String substring = filename.substring(filename.lastIndexOf("."));
+        final String s = UUID.randomUUID() + substring;
+        final File file = new File(photoFile);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        user.getPhfile().transferTo(new File(photoFile + s));
+        user.setPhoto(s);
         if (userService.saveUser(user)) {
             return new Result("修改成功！", Constants.Code.SUCCESS_CODE, Boolean.TRUE, null);
         }
+
         return new Result("修改失败！", Constants.Code.ERROR_CODE, Boolean.FALSE, null);
     }
     
