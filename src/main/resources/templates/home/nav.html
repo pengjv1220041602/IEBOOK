@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -24,8 +25,8 @@
                 	<ul class="subnav">
                     	<li class="subnav-li current" href="/books/homebook" data-id="1"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">首页</span></a></li>
                         <li class="subnav-li" href="/books/bookform" data-id="2"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">上传电子书</span></a></li>
-                        <li class="subnav-li" href="/kinds/kindform" data-id="3"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">电子书种类</span></a></li>
-                        <li class="subnav-li" href="/books/examinebook" data-id="4"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">审核电子书</span></a></li>
+                        <li th:if="${session.usersession.power == 1}" class="subnav-li" href="/kinds/kindform" data-id="3"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">电子书种类</span></a></li>
+                        <li th:if="${session.usersession.power == 1}" class="subnav-li" href="/books/examinebook" data-id="4"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">审核电子书</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-li">
@@ -33,7 +34,7 @@
                     <ul class="subnav">
                     	<li class="subnav-li" data-id="5" href="/users/userlisthtml"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">用户列表</span></a></li>
                         <li class="subnav-li" data-id="6" href="/users/updatepassword"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">修改密码</span></a></li>
-                        <!--<li class="subnav-li" data-id="7"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">类型选择1</span></a></li>-->
+                        <li class="subnav-li" data-id="7" href="/users/setuser"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">信息修改</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-li last-nav-li">

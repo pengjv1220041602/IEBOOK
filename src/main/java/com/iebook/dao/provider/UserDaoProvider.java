@@ -34,7 +34,7 @@ public class UserDaoProvider {
             {
                 UPDATE("tuser");
                 if (StringUtils.isNotBlank(user.getName())) {
-                    SET("tuser.name = #{name}");
+                    SET("tuser.`name` = #{name}");
                 }
                 if (StringUtils.isNotBlank(user.getPassword())) {
                     SET("tuser.password = #{password}");
@@ -48,11 +48,8 @@ public class UserDaoProvider {
                 if (user.getFlag() != null && (user.getFlag() == Constants.Code.EXIST_CODE || user.getFlag() == Constants.Code.NO_EXIST_CODE)) {
                     SET("flag = #{flag}" );
                 }
-                if (user.getUpdatedate() != null) {
-                    SET("updatedate = #{updatedate}" );
-                }
                 if (user.getPhoto() != null) {
-                    SET("photo = #{hoto}" );
+                    SET("photo = #{photo}" );
                 }
                 SET("updatedate = #{updatedate}");
                 WHERE("tuser.id = #{id}");

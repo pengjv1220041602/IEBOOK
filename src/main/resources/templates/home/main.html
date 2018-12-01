@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -17,8 +18,9 @@
     	<div class="hd-top">
             <h1 class="logo"><a href="javascript:;" class="logo-icon"></a></h1>
             <div class="user-info">
-                <a href="javascript:;" class="user-avatar"><span><!--<i class="info-num">2</i>--><img src="/users/photo" style="width: 45px; height: 45px;"/></span></a>
-                <span class="user-name">admin</span>
+                <!--<a href="javascript:;" class="user-avatar"><span>-->
+                <span class="user-name" th:text="${session.usersession.name}">admin</span>
+                <img src="/users/photo" style="width: 45px; height: 45px;"/></span></a>
                 <a href="javascript:;" class="more-info"></a>
             </div>
             <div class="setting ue-clear">
@@ -31,7 +33,7 @@
                 </div>
                 <ul class="setting-main ue-clear">
                 	<!--<li><a href="javascript:;">桌面</a></li>-->
-                    <li><a href="javascript:;">设置</a></li>
+                    <!--<li><a href="javascript:;">设置</a></li>-->
                     <!--<li><a href="javascript:;">帮助</a></li>-->
                     <li><a href="javascript:;" class="close-btn exit"></a></li>
                 </ul>

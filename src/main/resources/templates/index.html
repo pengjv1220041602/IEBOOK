@@ -28,10 +28,11 @@
 
 			<div class="logo"><img src="../../index/img/logo-burst.png" alt="logo platz" height="38" width="90"></div>
 
-        	<div id="main_tip_search">
+        	<div id="main_tip_search" style="margin-right: -86px;">
 				<form action="/">
-					<input type="submit"  id="tip_search_input" value="" style="width:0px;margin-left: -77px;" >
-					<input type="text" name="name" th:value="${name}" id="tip_search_input1" list="search" style="margin-left: 0px; padding: 4px 4px 4px 0" autocomplete=off >
+					<input type="submit"  id="tip_search_input" value="" style="width:0px;margin-left: -35px;margin-top: 11px;" >
+					<input type="text" style="margin-left: -247px; float:  left; margin-top:  6px; border-radius:15px; height: 39px; width: 200px;" name="name" th:value="${name}">
+					<!--<input type="text" name="name" th:value="${name}" id="tip_search_input1" list="search" style="margin-left: 0px; padding: 4px 4px 4px 0" autocomplete=off >-->
 				</form>
 			</div>
 
@@ -129,9 +130,9 @@
 				<!--<div class="wrapper-oldnew-prev">-->
 					<!--<div id="oldnew-prev"></div>-->
 				<!--</div>-->
-				<div class="wrapper-oldnew-next">
+				<!--<div class="wrapper-oldnew-next">
 					<a th:href="|/index?name=${name}|"><div id="oldnew-next" ></div></a>
-				</div>
+				</div>-->
 			</div>
 		</div>
     <div id="wrapper-copyright">

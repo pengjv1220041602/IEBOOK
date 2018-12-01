@@ -10,12 +10,16 @@ import com.iebook.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @Author ZhPJ
@@ -42,6 +46,17 @@ public class UserController {
     @RequestMapping(path = "/userlisthtml")
     public String userListHtml () {
         return "/user/userlist";
+    }
+
+    @RequestMapping(path = "setuser")
+    public String userset (HttpSession session, Model model) {
+        final User user = (User)session.getAttribute(this.USER_SESSION);
+        User u = new User ();
+        u.setId(user.getId());
+        final User user1 = userService.getUser(u);
+        model.addAttribute("user", user1);
+        session.setAttribute(this.USER_SESSION, user1);
+        return "/user/setuser";
     }
 
     @RequestMapping(path = "/updatepassword")
@@ -110,5 +125,23 @@ public class UserController {
     public Boolean logout(HttpSession session) {
         session.removeAttribute(this.USER_SESSION);
         return true;
+    }
+
+    @RequestMapping(path = "/updateuser", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateUser (User user) throws IOException {
+        if (user.getPhfile() != null) {
+            String filename = user.getPhfile().getOriginalFilename();
+            String substring = filename.substring(filename.lastIndexOf("."));
+            final String s = UUID.randomUUID() + substring;
+            final File file = new File(photoFile);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            user.getPhfile().transferTo(new File(photoFile + s));
+            user.setPhoto(s);
+        }
+        final Boolean b = userService.saveOrUpdateUser(user);
+        return new Result("修改成功！", 200, true, "true");
     }
 }

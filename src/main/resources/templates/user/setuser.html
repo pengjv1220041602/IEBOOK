@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<link rel="stylesheet" type="text/css" href="../../css/skin_/form.css" />
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<script type="text/javascript" src="../../js/global.js"></script>
+<script type="text/javascript" src="../../js/jquery.select.js"></script>
+
+    <script type="text/javascript" src="../../innerjs/setuser.js"></script>
+<title>基础信息</title>
+</head>
+
+<body>
+<div id="container">
+	<div id="hd">
+    </div>
+
+    <div id="bd">
+    	<div id="main">
+            <h2 class="subfild">
+            	<span>信息修改</span>
+            </h2>
+            <input type="hidden" th:value="${user.id}" id="userid">
+            <div class="subfild-content base-info">
+            	<div class="kv-item ue-clear">
+                	<label><span class="impInfo">*</span>用户名称</label>
+                	<div class="kv-item-content">
+                    	<input type="text" placeholder="用户名称" class="validates"  maxlength="35" th:value="${user.name}" id="name"/>
+                    </div>
+                    <span class="kv-item-tip">标题字数限制在20个字符</span>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>登录名</label>
+                    <div class="kv-item-content">
+                        <input type="text" placeholder="登录名" th:value="${user.username}" maxlength="20" id="username" class="validates" readonly="readonly"/>
+                    </div>
+                    <span class="kv-item-tip">标题字数限制在20个字符</span>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>邮箱</label>
+                    <div class="kv-item-content">
+                        <input type="text" placeholder="邮箱" maxlength="90" id="email" class="validates" th:value="${user.email}"/>
+                    </div>
+                    <span class="kv-item-tip">标题字数限制在90个字符</span>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>头像</label>
+                    <div class="kv-item-content">
+                        <input type="file" placeholder="头像" maxlength="90" id="photo" class="validates" />
+                    </div>
+                    <img id="photo-show" style="width: 80px; height: 80px;" src="/users/photo"/>
+                   <!-- <span class="kv-item-tip">标题字数限制在90个字符</span>-->
+                </div>
+            </div>
+            <div class="buttons">
+                <input class="button" type="button" id="userregist" value="确认提交" />
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
