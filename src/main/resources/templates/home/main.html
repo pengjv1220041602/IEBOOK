@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/jquery.dialog.css" />
 <script type="text/javascript" src="../../js/jquery.js"></script>
 <script type="text/javascript" src="../../js/global.js"></script>
-<title>企业OA办公后台管理模板</title>
+<title>电子书平台</title>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
             <div class="user-info">
                 <!--<a href="javascript:;" class="user-avatar"><span>-->
                 <span class="user-name" th:text="${session.usersession.name}">admin</span>
-                <img src="/users/photo" style="width: 45px; height: 45px;"/></span></a>
+                <a href="/users/setuser" target="_blank"  ><img src="/users/photo" style="width: 45px; height: 45px;"/></a></span></a>
                 <a href="javascript:;" class="more-info"></a>
             </div>
             <div class="setting ue-clear">
@@ -232,7 +232,8 @@ $('.exitDialog input[type=button]').click(function(e) {
 		$('.logo-icon').removeClass('active'); 
 	});
 	
-	
+	$("#div-photo").on("click", function () {
+    });
 	
 })();
 

@@ -66,7 +66,7 @@ public class HomeController {
         int i = random.nextInt();
         int page = i > 20 ? 1 : i;
         book.setExamine(Constants.ExamineCode.PASS);
-        PageInfo<Book> pageInfo = bookService.listBookByCondition(page, 30, book);
+        PageInfo<Book> pageInfo = bookService.listBookByCondition(page, 100, book);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("name", book.getName());
         return "/index";

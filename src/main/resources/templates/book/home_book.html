@@ -176,8 +176,8 @@
                     $.each(res.data.list, function (index, value) {
                         var tempArr = new Array();
                         // tempArr.push("<a href='javascriput:;'onclick='window.location.href=\"/books/downbooks?id="+value.id+"\"'>下载</a>");
-                        tempArr.push("<a href='/books/downbooks/1?id="+value.id+"'>下载</a>");
-                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook/1?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
+                        tempArr.push("<a href='/downbooks?id="+value.id+"'>下载</a>");
+                        tempArr.push("<a href='javascript:;' onclick='window.open(\"/books/onlinebook?id="+value.id+" \", \"_blank\")'>" + value.name +"</a>");
                         tempArr.push(value.author);
                         tempArr.push(value.kind.name);
                         tempArr.push("<a href='javascript:;' onclick='window.location.href=\"/users/userbooks/?updateuid="+value.updateuid +"\"'>" + (value.updatename ==null?'':value.updatename ) +"</a>");

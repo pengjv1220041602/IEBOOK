@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
 
     private boolean saveUserTo (User user) {
         user.setCreatedate(new Date());
+        user.setUpdatedate(new Date());
         user.setPower(Constants.PowerCode.USER_CODE);
         user.setFlag(Constants.Code.EXIST_CODE);
         user.setId(Utils.getUUID());
